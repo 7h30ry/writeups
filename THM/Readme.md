@@ -56,7 +56,7 @@ And comparing the $user to the LOGIN_USER hash, i moved to "http://<thm-ip>/cons
 define('LOGIN_USER', '6a61736f6e5f746573745f6163636f756e74');
 
 ```
-So i used thei command to decrypt the hex and go the username
+So i used thei command to decrypt the hex and got the username
 ```
 echo 6a61736f6e5f746573745f6163636f756e74 | xxd -r -p
 jason_test_account
