@@ -32,8 +32,8 @@ except Exception as e:
 Bacically what the code does is generate a random number ```guess = randint(1, 500_000_000_000)``` and we are to guess what the number is to get the flag
 Seeing that we have a large number and giving only 40 trials ``` while counter < 40```
 
-There wrote a script to solve it using Binary Search Algorithm (You can read up on it to understand what it entails)
-I also used pwn tool to connect to the server
+I wrote a script to solve it using Binary Search Algorithm (You can read up on it to understand what it entails)
+I also used pwn tool to connect and Interact with the server
 
 # Solve Script
 ```
