@@ -74,3 +74,4 @@ if __name__ == "__main__":
 ```
 
 It was a really fun chall.. Took me about 3hrs to solve :)
+```Flag: IDAN{Y0u_kn0w_H0w_T0_B1n4ry_S34rcH}```
