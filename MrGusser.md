@@ -5,7 +5,9 @@ Difficulty: Easy
 ```
 # Source code
 The code was hosted on a sever but i was given a source code
-```
+```python
+#!/usr/bin/python3
+
 from random import randint
 
 flag = b"IDAN{[REDACTED]}"
@@ -36,7 +38,9 @@ I wrote a script to solve it using Binary Search Algorithm (You can read up on i
 I also used pwn tool to connect and Interact with the server
 
 # Solve Script
-```
+```python
+#!/usr/bin/python3
+
 from pwn import *
 context.log_level = 'INFO'
 host = 'ip' # ip address of the serve
