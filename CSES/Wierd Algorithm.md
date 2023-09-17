@@ -32,7 +32,7 @@ Output:
 
 
 ## Solve script
-```
+```python
 n = int(input(" "))
 
 while n != 1:
