@@ -31,7 +31,7 @@ Output:
 4
 
 ## Solve script
-```
+```python
 def missing_number(n, num):
     # Calculate the sum of integers from 1 to n
     total_sum = (n * ( n + 1 )) // 2
