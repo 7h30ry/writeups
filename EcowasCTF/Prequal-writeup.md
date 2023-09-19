@@ -3311,7 +3311,7 @@ Note: When I tried decoding that ASCII decimal representation value it got us in
 Anyways what the hell is this:
 
 ```
-hbaa{{@A027B:42?@A0?646F:A2?04@=23@A2I0O04U646N0;S?L@Y}
+'hbaa{{@A027B:42?@A0?646F:A2?04@=23@A2I0O04U646N0;S?L@Y}'
 ```
 
 I noticed that this people love ROT47 (from the steg chall btw) so I tried converting it from that and got this
