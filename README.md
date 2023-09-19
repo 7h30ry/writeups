@@ -1,1 +1,1 @@
-# 7h30ry.github.io
+# 7h30ry
