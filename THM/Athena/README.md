@@ -37,7 +37,7 @@ I firstly checked if the ping function was working
 
 ![Screenshot from 2023-09-19 22-16-13](https://github.com/7h30ry/Writeups/assets/51336409/997e0a70-a86d-447c-a861-872530e1ed5d)
 
-Seeing that the ping is working i tried ```127.0.0.1;ls``` ```127.0.0.1| ls``  payload but it did not 
+Seeing that the ping is working i tried ```127.0.0.1;ls``` ```127.0.0.1| ls```  payload but it did not 
 
 ![Screenshot from 2023-09-19 22-18-25](https://github.com/7h30ry/Writeups/assets/51336409/0cf2028f-28e4-45de-9c1d-7dea43eee70e)
 
