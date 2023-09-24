@@ -145,8 +145,9 @@ print(damn._module.__builtins__['__import__']('os').popen("cat flag.txt").read()
 
 Payload gotten from 
 
-https://ctf.rip/backdoor16-worstpwnever/
+[here](https://ctf.rip/backdoor16-worstpwnever/)
 ```Flag: acdfCTF{M45t3r_0f_j41l_br34k3r}```
+
 
 
 # Mr. R0b0t
@@ -156,6 +157,7 @@ https://ctf.rip/backdoor16-worstpwnever/
 All i did was just search online for the answer
 
 ![Mr Robot](https://github.com/7h30ry/writeups/assets/51336409/e997428f-baa7-47c6-aef2-f81e64ab5506)
+
 ```Flag:acdFCTF{ChurchAvenueSubwayStation}```
 
 
