@@ -158,7 +158,9 @@ All i did was just search online for the answer
 
 ![Mr Robot](https://github.com/7h30ry/writeups/assets/51336409/e997428f-baa7-47c6-aef2-f81e64ab5506)
 
-```Flag:acdFCTF{ChurchAvenueSubwayStation}```
+```
+Flag:acdFCTF{ChurchAvenueSubwayStation}
+```
 
 
 # Mr. R0b0t 2
@@ -171,6 +173,7 @@ Doing some reverse image search
 
 
 ![Mrrobot2](https://github.com/7h30ry/writeups/assets/51336409/9155d744-d019-40a8-8291-1cb67cbe289b)
+
 ```Flag: acdfCTF{Coney Island, Brooklyn, New York}```
 
 
@@ -217,9 +220,11 @@ Y2F0IGZsYWcudHh0Cg==
 ```
 
 Payload
+
 ```
 echo Y2F0IGZsYWcudHh0Cg==|base6'4' -d|bas'h'
 ```
 
 ![Screenshot from 2023-09-24 19-52-34](https://github.com/7h30ry/writeups/assets/51336409/5a305f02-158a-40ae-8e71-37031dc8eba9)
+
 ```Flag: acdfCTF{bl4ckl15t3d_c0mmand_3xpung3r5} ```
