@@ -20,7 +20,7 @@
 
 - [Athena](https://7h30ry.github.io/writeups/THM/Athena/)
 
--[Super Secret TIp](https://7h30ry.github.io/writeups/THM/Super-Secret-TIp/)
+- [Super Secret TIp](https://7h30ry.github.io/writeups/THM/Super-Secret-TIp/)
 
 ## echoCTF
 
