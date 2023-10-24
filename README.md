@@ -22,6 +22,8 @@
 
 - [Super Secret TIp](https://7h30ry.github.io/writeups/THM/Super-Secret-TIp/)
 
+- [Hijack](https://7h30ry.github.io/writeups/THM/Hijack/)
+
 ## echoCTF
 
 - [netz-arbeiter](https://7h30ry.github.io/writeups/echoCTF/netz-arbeiter/)
