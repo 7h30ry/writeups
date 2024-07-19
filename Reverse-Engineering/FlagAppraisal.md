@@ -96,8 +96,36 @@ From this we can see it would
 - Compares our mangeld input with the encrypted flag
 - If the comparism if right that means we got the right flag input else we didn't get it
 
+From this we can conclude that our flag length should be 37 and the input we give it is going to be mangled before being compared against the encrypted flag
 
+Let's check the mangle function
+![image](https://github.com/user-attachments/assets/85ddf378-c532-438f-be64-cfbe0ab28804)
 
+Not bad but I had to rename variables and change the data types and i got this
+![image](https://github.com/user-attachments/assets/d3b6a4e3-2ed2-4e4f-85f0-02f3d3b97252)
+
+The C decompilation without type casting should look like this:
+
+```c
+
+void mangle(char *flag,uint length)
+
+{
+  uint state;
+  int i;
+  
+  state = 0;
+  for (i = 0; i < (int)(length - 1); i = i + 2) {
+    state = state * 0x21 ^ flag[i + 1] * 0x1fd ^ flag[i] * 0x101;
+    flag[i] = state;
+    flag[i + 1] = (state >> 8);
+  }
+  if ((length & 1) != 0) {
+    flag[length + -1] = state * 0x21 ^ flag[length + -1];
+  }
+  return;
+}
+```
 
 
 
