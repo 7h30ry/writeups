@@ -259,8 +259,6 @@ Running it gives the flag
 Flag: MetaCTF{c0un73rf3171ng_7h3_p4wn_$h0p}
 ```
 
-I enjoyed solving this :)
-
 Sayonara 😃
 
 
