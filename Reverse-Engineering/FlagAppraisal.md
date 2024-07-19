@@ -155,7 +155,7 @@ That is pretty stressful so I gave up on that idea
 
 After about an hour spent coming up with that I decided to actually reverse it and solve it a better way
 
-Now one thing i noticed was this:
+This is basically the algorithm and one thing i noticed was this:
 
 ```c
 state = 0
