@@ -20,7 +20,6 @@ We are given a x64 executable called `pawn_shop`
 The binary is also stripped so that means we won't have function name 
 
 I ran the binary to get an overview of what it does
-
 ![image](https://github.com/user-attachments/assets/ed3a1f37-d643-45ed-aab6-1c4925dc4dcd)
 
 It looks like we need to give it the right input to solve this and the input is going to be the flag?
@@ -30,6 +29,7 @@ Time for some static analysis
 Using Ghidra I decompiled the binary
 
 Here's the entry function
+
 ![image](https://github.com/user-attachments/assets/e3d81089-dcda-4b4e-9e1c-334b15ffc60a)
 
 ```
