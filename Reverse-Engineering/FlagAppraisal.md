@@ -22,3 +22,8 @@ The binary is also stripped so that means we won't have function name
 I ran the binary to get an overview of what it does
 ![image](https://github.com/user-attachments/assets/ed3a1f37-d643-45ed-aab6-1c4925dc4dcd)
 
+It looks like the right input to solve this is going to be the flag
+
+Time for some static analysis
+
+Using Ghidra I decompiled the binary
