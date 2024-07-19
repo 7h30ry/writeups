@@ -10,4 +10,7 @@ And i'll be showing you how I solved the Reverse Engineering challenge called `F
 
 ![image](https://github.com/user-attachments/assets/84925ab1-e5a8-4afc-8170-ee3c8ffe0b53)
 
-I actually never got to submit the flag because I ended up solving it 3 minutes after the ctf ended
+I actually never got to submit the flag because I ended up solving it 3 minutes after the ctf ended due to skill issue and one thing is that the ctf runs for just 2 hours
+
+
+
