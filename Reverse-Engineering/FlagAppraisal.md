@@ -6,4 +6,8 @@ My github account was placed as spam so i'm currently waiting for Github support
 
 So today I participated in the MetaCTF Monthly Challenge
 
-And i'll be showing you how I solved the Reverse Engineering challenge
+And i'll be showing you how I solved the Reverse Engineering challenge called `Flag Appraisal`
+
+![image](https://github.com/user-attachments/assets/84925ab1-e5a8-4afc-8170-ee3c8ffe0b53)
+
+I actually never got to submit the flag because I ended up solving it 3 minutes after the ctf ended
