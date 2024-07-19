@@ -2,7 +2,7 @@
 
 Hi everyone, this is `0x1337` also known as `h4cky0u`
 
-My github account was placed as spam so i'm currently waiting for Github support to fix it
+My github account was placed as spam so i'm currently waiting for Github support to fix it that's why i'm using my Buddy's account for this
 
 So today I participated in the MetaCTF Monthly Challenge
 
