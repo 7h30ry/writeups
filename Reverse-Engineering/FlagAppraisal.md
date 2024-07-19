@@ -175,33 +175,93 @@ But then the value won't be 100% accurate
 
 You might be thinking what do i mean by that
 
-Well bit right shifting basically is this:
+Bitwise left and right shifts are not inverse operations and serve different purposes: left shifting increases the value (similar to multiplication by powers of 2), while right shifting decreases the value (similar to division by powers of 2).
+
+One way to just know this is by trying to play with it using different value and see for yourself
+
+Ok back to the challenge how do we ensure that the state value we get is actually right?
+
+Because we know that the flag starts from `MetaCTF` we can use the first two character to generate the next state value
+
+And we can then apply a smart brute force technique
+
+Since we know the current state for the iteration:
 
 ```
-a * 2**n
-
-a = number to shift
-n = shift value
+state = (state * 33) ^ (flag[i + 1] * 509 ^ (flag[i] * 257)
 ```
 
-While bit left shift is:
+We can brute force for `flag[i] & flag[i + 1]` and we pass the two values into the mangling algorithm then we compare the mangled value against the encrypted value
+
+If it's right that means we've retrieved it and we can as well use that to generate the next state value and the next two characters
+
+This process is going to be repeated till we get to `len(flag) - 1`
+
+Here's my solve script
+
+```python
+import string
+
+def get_key(v1, v2):
+    value = v2 << 8
+    for i in range(value, value+1000):
+        op1 = i & 0xff
+        op2 = (i >> 8) & 0xff
+        if (op1 == v1) and (op2 == v2):
+            value = i
+
+    return value
+
+def brute(value):
+    charset = string.ascii_letters + '{_}'
+    for var1 in charset:
+        for var2 in charset:
+            op = (257 * ord(var1)) ^ (509 * ord(var2))
+            if op == value:
+                return var1 + var2
+
+def mysolve(var1, var2, key):
+    charset = string.printable 
+
+    for v1 in charset:
+        for v2 in charset:
+            value = (257 * ord(v1)) ^ (509 * ord(v2)) ^ (33 * key)
+            cmp1 = value & 0xff
+            cmp2 = (value >> 8) & 0xff
+
+            if (cmp1 == var1) and (cmp2 == var2):
+                return (v1, v2, value)
+
+
+enc = [ 0x9c, 0x85, 0xb5, 0x8d, 0x12, 0xa0, 0x9b, 0x10, 0xe8, 0x1f, 0x2b, 0xb3, 0xdb, 0x4a, 0x87, 0x1e, 0x39, 0xbd, 0x03, 0x32, 0xc6, 0xd0, 0x82, 0xdb, 0xcd, 0x46, 0x82, 0xa1, 0x6d, 0x09, 0x80, 0xe5, 0x6c, 0x7f, 0x6c, 0x82, 0x91 ]
+flag = ""
+
+key = get_key(enc[0], enc[1])
+flag += brute(key)
+
+
+for i in range(2, len(enc)-1, 2):
+    v1 = enc[i]
+    v2 = enc[i+1]
+    r = mysolve(v1, v2, key)
+    flag += r[0] + r[1]
+    key = r[2]
+    
+flag += '}'
+
+print(flag)
+```
+
+Running it gives the flag
+![image](https://github.com/user-attachments/assets/ea603a3c-4ac5-45ea-86aa-efe1593263fd)
 
 ```
-a // 2**n
-
-a = number to shift
-n = shift value
+Flag: MetaCTF{c0un73rf3171ng_7h3_p4wn_$h0p}
 ```
 
-And let's try it on some value
-![image](https://github.com/user-attachments/assets/a7975969-ca90-486c-9e76-6f502841be13)
+I enjoyed solving this :)
 
-Ok that process was reversible and how about this?
-![image](https://github.com/user-attachments/assets/384cf6aa-ce2c-41c1-b191-60b4fe179d15)
-
-
-
-
+Sayonara 😃
 
 
 
