@@ -196,6 +196,9 @@ n = shift value
 And let's try it on some value
 ![image](https://github.com/user-attachments/assets/a7975969-ca90-486c-9e76-6f502841be13)
 
+Ok that process was reversible and how about this?
+![image](https://github.com/user-attachments/assets/384cf6aa-ce2c-41c1-b191-60b4fe179d15)
+
 
 
 
