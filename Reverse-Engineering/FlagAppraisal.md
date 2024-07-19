@@ -127,6 +127,72 @@ void mangle(char *flag,uint length)
 }
 ```
 
+So what does this do?
+
+- It initializes variable `state` to 0
+- First it interates through the length of our input minus one then incrementing the iterate by 2. For each iteration it does this
+    - Generate a new state based on the current flag character and the succeeding one using xor and multiplication
+    - Sets the current flag value to the generated state
+    - Bit right shift the state value by 8 and sets the succeeding flag value to it
+- If the length of the flag provided is not divisible by 2 then it sets the last character to a certain value based on the xoring the current state value with the character and 33
+
+
+That's how the mangling algorithm is
+
+So after this mangling is done it compares the mangled input with this:
+
+```
+enc = [ 0x9c, 0x85, 0xb5, 0x8d, 0x12, 0xa0, 0x9b, 0x10, 0xe8, 0x1f, 0x2b, 0xb3, 0xdb, 0x4a, 0x87, 0x1e, 0x39, 0xbd, 0x03, 0x32, 0xc6, 0xd0, 0x82, 0xdb, 0xcd, 0x46, 0x82, 0xa1, 0x6d, 0x09, 0x80, 0xe5, 0x6c, 0x7f, 0x6c, 0x82, 0x91 ]
+```
+
+Now how did I go about solving it?
+
+At first, I was too lazy to reverse it, so I tried to brute force the right character. However, the issue was that the current character depends on the next character, which means having to brute force two characters at a time.
+
+That kind of worked, but it gave so many values that met the condition. So that would mean I needed to figure out the right word that made (sense / readable) for every values gotten
+
+That is pretty stressful so I gave up on that idea
+
+After about an hour spent coming up with that I decided to actually reverse it and solve it a better way
+
+Now one thing i noticed was this:
+
+```c
+state = 0
+
+state = (state * 33) ^ (flag[i + 1] * 509_ ^ (flag[i] * 257)
+flag[i] = state
+flag[i + 1] = state >> 8
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
