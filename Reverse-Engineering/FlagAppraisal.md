@@ -160,10 +160,46 @@ Now one thing i noticed was this:
 ```c
 state = 0
 
-state = (state * 33) ^ (flag[i + 1] * 509_ ^ (flag[i] * 257)
+state = (state * 33) ^ (flag[i + 1] * 509 ^ (flag[i] * 257)
 flag[i] = state
 flag[i + 1] = state >> 8
 ```
+
+We can reverse the last step by doing this
+
+```c
+flag[i + 1] = state << 8
+```
+
+But then the value won't be 100% accurate
+
+You might be thinking what do i mean by that
+
+Well bit right shifting basically is this:
+
+```
+a * 2**n
+
+a = number to shift
+n = shift value
+```
+
+While bit left shift is:
+
+```
+a // 2**n
+
+a = number to shift
+n = shift value
+```
+
+And let's try it on some value
+![image](https://github.com/user-attachments/assets/a7975969-ca90-486c-9e76-6f502841be13)
+
+
+
+
+
 
 
 
