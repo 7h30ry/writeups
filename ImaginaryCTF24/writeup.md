@@ -13,6 +13,7 @@ And in this writeup I'll go through the challenges which I solved
 - Journal
 - PC2
 - Crystals
+- Readme2
 
 ### Reversing
 - Unoriginal
@@ -27,4 +28,45 @@ And in this writeup I'll go through the challenges which I solved
 - Onewrite
 
 
+---
+---
+
 ### Web
+
+#### Readme
+![image](https://github.com/user-attachments/assets/83893b67-ce4e-4b9f-94f5-d449f57b339b)
+
+We are given the web instance and a file sharing server which has a compressed archive
+![image](https://github.com/user-attachments/assets/f3a804c0-ee26-4ce4-8081-22a17d73342f)
+
+After downloading it I uncompressed it and got this
+![image](https://github.com/user-attachments/assets/f3c6e762-d328-414c-af87-d3e05ed34d7f)
+
+So that's the application source code
+
+Opening it in VSCode I saw the flag in the `Dockerfile` 
+![image](https://github.com/user-attachments/assets/d980e458-4cfa-4eb3-9ad7-a5f8a71465fc)
+
+It seems this was unintended which lead to the release of `Readme2` i presume
+
+In any case I got the flag
+
+```
+Flag: ictf{path_normalization_to_the_rescue}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
