@@ -511,7 +511,7 @@ And finally we recover the original value
 flag_char = ((((((~(enc) - 0x539) ^ key) << 8) << 56) >> 0x3d) >> 5) & 0xff
 ```
 
-With that I wrote a script to get the flag:
+With that I wrote a [script](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/Rust/solve.py) to get the flag:
 
 ```python
 def reverse(enc):
