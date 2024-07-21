@@ -259,13 +259,48 @@ And with that I got the flag
 Flag: ictf{seems_like_you_broke_it_pretty_bad_76a87694}
 ```
 
+---
+---
 
+### Reversing
 
+#### Unoriginal
+![image](https://github.com/user-attachments/assets/d3758826-a91d-4f4c-8393-29d3c520740d)
 
+I downloaded the executable and checked what type of file it is
+![image](https://github.com/user-attachments/assets/2899bd68-c53a-45d0-a846-e46a8469ee95)
 
+Ok a x64 binary which is not stripped
 
+I ran it to get an overview of what it does
+![image](https://github.com/user-attachments/assets/40fccd39-a8e2-446d-ac8e-890ad98e5185)
 
+It requires us to give it the right flag
 
+Using IDA I decompiled the binary and here's the main function
+![image](https://github.com/user-attachments/assets/45f46868-70a8-49bc-bfd2-a612ea87bf12)
+
+So reading through the disassembly we see that it would:
+- Print out the msg
+- Receive our input which is stored in `rbp+s1`
+- Initializes a counter variable `rbp+var_44` to `0`
+- It then jumps to `loc_122E` which checks if the counter is equal to `0x2f`
+- If that counter is less than the expected value it jumps to `loc_1212`
+- And what that does is basically performing a xor operation on the input value at the counter index with 5
+- But if the comparism doesn't return True with will then compare the value with "lfqc~opvqZdkjqm`wZcidbZfm`fn`wZd6130a0`0``761gdx"
+  - If this `strcmp` call returns `True` that means we got the flag else that's the wrong flag
+ 
+
+At this point it's clear that the encryption logic is basically using xor with key of 5 against our input and then comparing it against a hardcoded encrypted flag
+
+To reverse it we just need to xor the encrypted flag with 5
+
+I used cyberchef to do that
+![image](https://github.com/user-attachments/assets/a3d589b4-52d4-40e3-83bd-83fd27740c4b)
+
+```
+Flag: ictf{just_another_flag_checker_a3465d5e5ee234ba}
+```
 
 
 
