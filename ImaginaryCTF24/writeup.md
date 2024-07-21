@@ -324,9 +324,31 @@ Ok good at this point we know that the encryption algorithm always would return 
 Time to reverse it
 
 Using Ghidra I decompiled the binary and here's the main function
+![image](https://github.com/user-attachments/assets/338fda27-fd26-46a1-bb48-d47dfe0928d9)
 
+Because `debug_info` is enabled, it makes life much easier for me since I'm not familiar with rust internals or the Rust programming language. This way, I won't end up trying to reverse-engineer an internal implementation 😅
 
+Ok let's continue
 
+```c
+void main(int param_1,u8 **param_2)
+
+{
+  std::rt::lang_start<()>(rust::rust::main,(long)param_1,param_2,0);
+  return;
+}
+```
+
+So it calls `rust::rust::main` and here's the decompilation
+![image](https://github.com/user-attachments/assets/f9650417-f2cb-4301-9a53-1cdc9f1676a1)
+
+Basically it would print out the text, receive the msg and the key then call the `encrypt` function
+
+```c
+encrypt((char *)local_50._8_8_,stack0xffffffffffffffb8.length);
+```
+
+We can assume that the `encrypt` function would require the `msg & key` as the parameter but to confirm I set a breakpoint at the `call` to this function
 
 
 
