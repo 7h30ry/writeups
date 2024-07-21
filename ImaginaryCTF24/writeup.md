@@ -360,7 +360,22 @@ encrypt(char *msg, int msg_length, int key);
 
 The reason why Ghidra didn't get that right is because the data type wasn't set correctly, if I'm not mistaken
 
+Moving on, let us check out the encrypt function decompilation
+![image](https://github.com/user-attachments/assets/bb044728-318d-4b29-9f59-fe5bd3d628f6)
 
+Wait wtf the parameters to this function is just 2?
+
+```c
+rust::rust::encrypt(char *message,int key)
+```
+
+And from the debug symbol it shows the right way it's called
+
+```rust
+void encrypt(&str message, u128 key)
+```
+
+Oh well, let's continue still.
 
 
 
