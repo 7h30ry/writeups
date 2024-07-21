@@ -7,3 +7,22 @@ Hello guys, I'm `0x1337` and last night I participated in ImaginaryCTF
 Even though I started really late i'm happy to have least solved some challenges
 
 And in this writeup I'll go through the challenges which I solved
+
+### Web
+- Readme
+- Journal
+- PC2
+- Crystals
+
+### Reversing
+- Unoriginal
+- Rust
+- BF
+- Absolute Flag Checker
+- Watchdog
+
+### Pwn
+- Imgstore
+- Ropity
+- Onewrite
+- 
