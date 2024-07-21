@@ -464,5 +464,85 @@ def encrypt(msg, msg_len, key):
     print(enc)
 ```
 
+I tested my encryption function and it turned out right
+
+So now how do we go about reversing that?
+
+One thing we need to know is that it uses the provided `key` as the `xor` key
+
+So let's start the reverse option
+
+Moving backwards we need to recover `mangle ^ key` and we can do that by doing this:
+
+```
+~(enc) - 0x539
+```
+
+Now to recover `mangle` we need the xor key but in this case we don't know the xor key used to encrypt the flag
+
+But because of the symmetric property of XOR we can recover the `key` using this:
+
+```
+(~(enc) - 0x539) ^ ord(known_pt[0])
+```
+
+Since we know the flag starts with `ictf` we can basically use the first character to recover the key
+
+But I noticed even though that partiallly worked it didn't really give the correct key
+
+In my case when testing I noticed that the last 4 digits are not right
+
+That isn't a problem because we can just brute force it
+
+Moving on, we assume we have the right key so now we need to recover `mangle`
+
+```
+(~(enc) - 0x539) ^ key
+```
+
+Ok good so now we recover `shift_left`
+
+```
+demangle = ((((~(enc) - 0x539) ^ key) << 8) << 56) >> 0x3d
+```
+
+And finally we recover the original value
+
+```
+flag_char = ((((((~(enc) - 0x539) ^ key) << 8) << 56) >> 0x3d) >> 5) & 0xff
+```
+
+With that I wrote a script to get the flag:
+
+```python
+def reverse(enc):
+    key_ = ((~(enc[0]) - 0x539) ^ ord('i')) >> 16
+   
+    for key in range(key_, key_+9999):
+        pt = ""
+        for i in range(len(enc)):
+            v1 = (~(enc[i]) - 0x539) ^ key
+            demangle = ((v1 << 8) << 56) >> 0x3d
+            pt += chr((demangle >> 5) & 0xff)
+
+        if "ictf" in pt:
+            print(pt)
+            break
 
 
+def main():
+    enc = [-42148619422891531582255418903, -42148619422891531582255418927, -42148619422891531582255418851, -42148619422891531582255418907, -42148619422891531582255418831, -42148619422891531582255418859, -42148619422891531582255418855, -42148619422891531582255419111, -42148619422891531582255419103, -42148619422891531582255418687, -42148619422891531582255418859, -42148619422891531582255419119, -42148619422891531582255418843, -42148619422891531582255418687, -42148619422891531582255419103, -42148619422891531582255418907, -42148619422891531582255419107, -42148619422891531582255418915, -42148619422891531582255419119, -42148619422891531582255418935, -42148619422891531582255418823]
+
+    reverse(enc)
+    
+
+if __name__ == '__main__':
+    main()
+```
+
+Running it gives the flag
+![image](https://github.com/user-attachments/assets/4baf7718-f850-4d77-b382-6a006cfab751)
+
+```
+Flag: ictf{ru57_r3v_7f4d3a}
+```
