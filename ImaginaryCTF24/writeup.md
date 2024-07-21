@@ -397,10 +397,10 @@ The main part where it does the encryption is here:
     local_38 = ~uVar2;
 ```
 
-And I had to read the assembly disassembly from `rust::encrypt+600`
+And I had to read the disassembly from `rust::encrypt`
 
 ```c
-  0x000055555555e3a8 <+600>:   mov    rcx,QWORD PTR [rsp+0x58]
+   0x000055555555e3a8 <+600>:   mov    rcx,QWORD PTR [rsp+0x58]
    0x000055555555e3ad <+605>:   mov    rax,QWORD PTR [rsp+0x60]
    0x000055555555e3b2 <+610>:   shld   rax,rcx,0x5
    0x000055555555e3b7 <+615>:   mov    QWORD PTR [rsp+0x38],rax
@@ -448,8 +448,21 @@ And I had to read the assembly disassembly from `rust::encrypt+600`
    0x000055555555e49a <+842>:   test   al,0x1
 ```
 
+Then after understanding it, I wrote the python equivalent which is this:
 
+```python
+def encrypt(msg, msg_len, key):
+    enc = []
+    for i in range(msg_len):
+        current_value = ord(msg[i])
+        shift_left = current_value << 5
+        mangle = ((shift_left << 0x3d) >> 56) >> 8
+        var1 = ~((mangle ^ key) + 0x539)
 
+        enc.append(var1)
+    
+    print(enc)
+```
 
 
 
