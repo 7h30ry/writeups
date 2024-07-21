@@ -287,7 +287,7 @@ So reading through the disassembly we see that it would:
 - It then jumps to `loc_122E` which checks if the counter is equal to `0x2f`
 - If that counter is less than the expected value it jumps to `loc_1212`
 - And what that does is basically performing a xor operation on the input value at the counter index with 5
-- But if the comparism doesn't return True with will then compare the value with "lfqc~opvqZdkjqm`wZcidbZfm`fn`wZd6130a0`0``761gdx"
+- But if the length comparism doesn't return True with will then compare the our encrypted value against a hardcoded one
   - If this `strcmp` call returns `True` that means we got the flag else that's the wrong flag
  
 
@@ -301,6 +301,20 @@ I used cyberchef to do that
 ```
 Flag: ictf{just_another_flag_checker_a3465d5e5ee234ba}
 ```
+
+#### Rust
+![image](https://github.com/user-attachments/assets/eac743f7-2471-4b3b-8d1e-0c79774595c8)
+
+After downloading attached file I saw it was a binary and an output file
+
+Checking the file type of the executable shows this
+![image](https://github.com/user-attachments/assets/9a09749c-92c3-4a99-b452-6147d4c4bcf2)
+
+So we are working with a 64bits binary which is dynamically linked and not stripped
+
+And good enough we have debug_info enabled which means there would debug symbols
+
+The other file attached was `output.txt` which contains the output when the program was ran against the flag
 
 
 
