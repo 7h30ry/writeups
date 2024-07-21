@@ -375,13 +375,10 @@ And from the debug symbol it shows the right way it's called
 void encrypt(&str message, u128 key)
 ```
 
-Oh well, let's continue still.
+Oh well, let's continue
+![image](https://github.com/user-attachments/assets/1848087f-c314-48a8-bf6a-93d3c4e23620)
 
-
-
-
-
-
+I put the `encrypt` function decompilation [here](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/Rust/encrypt.c)
 
 
 
