@@ -665,7 +665,7 @@ __int64 __fastcall iterate(int a1)
 }
 ```
 
-So this function returns the next index, so it's just a loop
+So this function modifies the flag character at the specified index and returns the next index
 
 I translated this function to it's python representation 
 
@@ -692,11 +692,11 @@ def iterate(i):
     return i + 1
 ```
 
-And after some test I figured that this algorithm is basically deterministic which means that the characters are modified independently of each other
+And after some tests, I figured out that this algorithm basically modifies the characters deterministically, which means that the characters are modified independently of each other.
 
 With that I wrote a brute force script which just tries all printable characters and check if it equals the modified flag
 
-Here's my [solve]()
+Here's my [solve](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/Unconditional/solve.py)
 
 ```python
 import string
@@ -768,6 +768,23 @@ for r in range(m):
         else:
             print('', end='')
     print()
+```
+
+Running it i got the flag
+![image](https://github.com/user-attachments/assets/7ab29004-b455-410d-9111-5a06a87daf35)
+
+```
+ictf{m0r3_than_1jway5_t0_c0n7r0l}
+```
+
+But that doesn't work!
+
+If you read it you will notice the issue 
+
+The final flag is this:
+
+```
+Flag: ictf{m0r3_than_1_way5_t0_c0n7r0l}
 ```
 
 
