@@ -314,8 +314,16 @@ So we are working with a 64bits binary which is dynamically linked and not strip
 
 And good enough we have debug_info enabled which means there would debug symbols
 
-The other file attached was `output.txt` which contains the output when the program was ran against the flag
+The other file attached is output.txt, which contains the output from when the author ran the program against the flag
 
+Let's also run it to get an overview of what it does
+![image](https://github.com/user-attachments/assets/5361b299-5fde-452b-938a-62b484ed6561)
+
+Ok good at this point we know that the encryption algorithm always would return the same value if the key is the same
+
+Time to reverse it
+
+Using Ghidra I decompiled the binary and here's the main function
 
 
 
