@@ -17,6 +17,7 @@ And in this writeup I'll go through the challenges which I solved
 ### Reversing
 - Unoriginal
 - Rust
+- Unconditional
 - Absolute Flag Checker
 - Watchdog
 
@@ -787,7 +788,25 @@ The final flag is this:
 Flag: ictf{m0r3_than_1_way5_t0_c0n7r0l}
 ```
 
+#### Absolute Flag Checker
+![image](https://github.com/user-attachments/assets/394034a5-df97-43ac-8cfd-0c11d4fccba9)
 
+After downloading the attachment i saw that it's a 64bits Windows Portable Executable file
+![image](https://github.com/user-attachments/assets/2e1b5d2e-f0b3-4de4-96d5-cdf1c9a5e6cf)
+
+I ran it using `wine` and it showed this
+![image](https://github.com/user-attachments/assets/1997080a-80f8-4e3f-a82e-0abf5b8b3e3c)
+
+Hmm not output
+
+Using IDA I decompiled the binary and here's the main function
+![image](https://github.com/user-attachments/assets/12501fa3-75db-436f-8135-f64310307ad7)
+
+Ok the code is really long
+
+But the idea is that we need the flag character to satisfy each of does operations
+
+Incase you want the whole decompilation you can find it [here]()
 
 
 
