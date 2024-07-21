@@ -13,7 +13,6 @@ And in this writeup I'll go through the challenges which I solved
 - Journal
 - PC2
 - Crystals
-- Readme2
 
 ### Reversing
 - Unoriginal
@@ -191,9 +190,10 @@ I copied the `xec` function to know how the final python code would be based on 
 
 This is how the final code would be:
 
-```
+```python
 def main():
     print('hi')
+
 from parse import rgb_parse
 print(rgb_parse(main())
 ```
@@ -226,9 +226,38 @@ Back to my netcat listener I got a reverse shell
 Flag: ictf{d1_color_picker_fr_2ce0dd3d}
 ```
 
+#### Crystals
+![image](https://github.com/user-attachments/assets/673cd703-5455-4266-bc05-3a40e2cbd45e)
 
+After downloading the source code I checked it out
 
+The `Dockerfile` shows it's running a ruby web server
+![image](https://github.com/user-attachments/assets/3becf51e-06fc-41d6-a720-c93cfb64a9e2)
 
+The docker compose file shows the flag is stored as the `hostname`
+![image](https://github.com/user-attachments/assets/cfb438b8-1278-43f6-b519-44a7781e7d63)
+
+The main application source code shows only one route available which is `/` and what it does is just to include the `index.erb` file
+![image](https://github.com/user-attachments/assets/ca88b02e-2469-4873-b5c4-0aa764c72f94)
+
+Ok what exactly do we do?
+
+Since the flag is stored as the `hostname` I tried to leak it by causing an error
+
+And to achieve that I sent an invalid request
+
+To do that I used `curl` because using my web browser ended up urlencoding the path i tried accessing
+![image](https://github.com/user-attachments/assets/c1c690ff-0815-4ead-808c-ed6d142e1785)
+
+```
+curl 'http://crystals.chal.imaginaryctf.org/`'
+```
+
+And with that I got the flag
+
+```
+Flag: ictf{seems_like_you_broke_it_pretty_bad_76a87694}
+```
 
 
 
