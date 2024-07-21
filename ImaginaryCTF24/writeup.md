@@ -381,6 +381,72 @@ Oh well, let's continue
 
 I put the `encrypt` function decompilation [here](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/Rust/encrypt.c)
 
+So what does this do?
+
+The main part where it does the encryption is here:
+
+```c
+    local_80 = (ulong)extraout_DL << 5;
+    local_70 = local_80 >> 3;
+    local_68 = 0;
+    local_60 = in_RDX ^ local_70;
+    uVar3 = local_60 + 0x539;
+    uVar2 = in_RCX + (0xfffffffffffffac6 < local_60);
+    if (SCARRY8(in_RCX,0) != SCARRY8(in_RCX,(ulong)(0xfffffffffffffac6 < local_60))) break;
+    local_40 = ~uVar3;
+    local_38 = ~uVar2;
+```
+
+And I had to read the assembly disassembly from `rust::encrypt+600`
+
+```c
+  0x000055555555e3a8 <+600>:   mov    rcx,QWORD PTR [rsp+0x58]
+   0x000055555555e3ad <+605>:   mov    rax,QWORD PTR [rsp+0x60]
+   0x000055555555e3b2 <+610>:   shld   rax,rcx,0x5
+   0x000055555555e3b7 <+615>:   mov    QWORD PTR [rsp+0x38],rax
+   0x000055555555e3bc <+620>:   shl    rcx,0x5
+   0x000055555555e3c0 <+624>:   mov    QWORD PTR [rsp+0x40],rcx
+   0x000055555555e3c5 <+629>:   mov    QWORD PTR [rsp+0x178],rcx
+   0x000055555555e3cd <+637>:   mov    QWORD PTR [rsp+0x180],rax
+   0x000055555555e3d5 <+645>:   mov    rcx,QWORD PTR [rsp+0x90]
+   0x000055555555e3dd <+653>:   mov    rdx,QWORD PTR [rsp+0x98]
+   0x000055555555e3e5 <+661>:   mov    rax,QWORD PTR [rsp+0x38]
+   0x000055555555e3ea <+666>:   mov    rdi,QWORD PTR [rsp+0x40]
+   0x000055555555e3ef <+671>:   mov    rsi,rax
+   0x000055555555e3f2 <+674>:   shld   rsi,rdi,0x3d
+   0x000055555555e3f7 <+679>:   sar    rax,0x3
+   0x000055555555e3fb <+683>:   mov    QWORD PTR [rsp+0x190],rax
+   0x000055555555e403 <+691>:   mov    QWORD PTR [rsp+0x188],rsi
+   0x000055555555e40b <+699>:   xor    rdx,rsi
+   0x000055555555e40e <+702>:   xor    rcx,rax
+   0x000055555555e411 <+705>:   mov    QWORD PTR [rsp+0x1a0],rcx
+   0x000055555555e419 <+713>:   mov    QWORD PTR [rsp+0x198],rdx
+   0x000055555555e421 <+721>:   add    rdx,0x539
+   0x000055555555e428 <+728>:   mov    QWORD PTR [rsp+0x28],rdx
+   0x000055555555e42d <+733>:   adc    rcx,0x0
+   0x000055555555e431 <+737>:   seto   al
+   0x000055555555e434 <+740>:   mov    QWORD PTR [rsp+0x30],rcx
+   0x000055555555e439 <+745>:   test   al,0x1
+   0x000055555555e43b <+747>:   jne    0x55555555e4a0 <_ZN4rust7encrypt17h4f52d2bd6ffc7936E+848>
+   0x000055555555e43d <+749>:   mov    rcx,QWORD PTR [rsp+0x90]
+   0x000055555555e445 <+757>:   mov    rdx,QWORD PTR [rsp+0x98]
+   0x000055555555e44d <+765>:   mov    rsi,QWORD PTR [rsp+0x30]
+   0x000055555555e452 <+770>:   mov    rax,QWORD PTR [rsp+0x28]
+   0x000055555555e457 <+775>:   mov    QWORD PTR [rsp+0x1a8],rax
+   0x000055555555e45f <+783>:   mov    QWORD PTR [rsp+0x1b0],rsi
+   0x000055555555e467 <+791>:   not    rax
+   0x000055555555e46a <+794>:   mov    QWORD PTR [rsp+0x8],rax
+   0x000055555555e46f <+799>:   not    rsi
+   0x000055555555e472 <+802>:   mov    QWORD PTR [rsp+0x10],rsi
+   0x000055555555e477 <+807>:   mov    QWORD PTR [rsp+0x1c0],rsi
+   0x000055555555e47f <+815>:   mov    QWORD PTR [rsp+0x1b8],rax
+   0x000055555555e487 <+823>:   add    rdx,rdx
+   0x000055555555e48a <+826>:   mov    QWORD PTR [rsp+0x18],rdx
+   0x000055555555e48f <+831>:   adc    rcx,rcx
+   0x000055555555e492 <+834>:   setb   al
+   0x000055555555e495 <+837>:   mov    QWORD PTR [rsp+0x20],rcx
+   0x000055555555e49a <+842>:   test   al,0x1
+```
 
 
 
