@@ -349,9 +349,16 @@ encrypt((char *)local_50._8_8_,stack0xffffffffffffffb8.length);
 ```
 
 We can assume that the `encrypt` function would require the `msg & key` as the parameter but to confirm I set a breakpoint at the `call` to this function
+![image](https://github.com/user-attachments/assets/2e26eca8-7b9d-4af7-85d1-2a56e0980fd0)
+![image](https://github.com/user-attachments/assets/5eafaf61-08a8-4c8d-83a0-623ab4031b88)
 
+Ok good our assumption was almost right but this correct calling convention is this:
 
+```c
+encrypt(char *msg, int msg_length, int key);
+```
 
+The reason why Ghidra didn't get that right is because the data type wasn't set correctly, if I'm not mistaken
 
 
 
