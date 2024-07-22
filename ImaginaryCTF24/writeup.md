@@ -1171,6 +1171,47 @@ So we are working with a x64 executable which is dynamically linked and not stri
 And we can see that the only protections enabled is `NX` which prevents shellcode execution on the stack (NOT LIKE WE NEED THIS)
 
 I ran the binary to get an overview of what it does
+![image](https://github.com/user-attachments/assets/b302c8ec-182c-44cd-ae76-cb1a7f638a23)
+
+It seems it would receive our input then exit?
+
+To know that I decompiled the binary using IDA
+
+Here's the main function
+![image](https://github.com/user-attachments/assets/64ee6ee0-3502-4cb4-81e1-d39c55574555)
+
+Very small code
+
+The available functions are
+![image](https://github.com/user-attachments/assets/f883a214-3c83-46a2-90a4-69b2432af061)
+
+There's a function which caught my attention and it's called `printfile`
+![image](https://github.com/user-attachments/assets/a024b8e6-a35d-4a24-a97e-0dca58bf28e4)
+
+And basically what it does is to `open` the file stored in the `rdi` and prints it's content to `stdout`
+
+Ok we can tell at this point our goal would be to call this function because it wasn't referenced in the main function
+
+Speaking of main function what's the bug there?
+
+```c
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  char s[8]; // [rsp+8h] [rbp-8h] BYREF
+
+  return (unsigned int)fgets(s, 256, _bss_start);
+}
+```
+
+Well it's an obvious buffer overflow because we are reading in at most 256 bytes into a buffer that can only hold up 8 bytes
+
+Ok so we can tell this our goal is to redirect the instruction pointer to the `printfile` function passing `flag.txt` as the parameter (`$rdi`)
+
+I checked for available gadgets and to be surprise (not) i saw that there wasn't any gadget that can let me control the `rdi` register directly
+![image](https://github.com/user-attachments/assets/be6d3c92-7bf7-4062-b327-e086ea00bc25)
+![image](https://github.com/user-attachments/assets/40c81491-43d8-4a1d-9cab-0e088e333907)
+
+Well from the challenge name we can tell our goal would be to use the gadgets to rop around this issue LOL
 
 
 
