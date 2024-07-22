@@ -19,12 +19,14 @@ And in this writeup I'll go through the challenges which I solved
 - Rust
 - Unconditional
 - Absolute Flag Checker
+- Watchdog
 
 ### Pwn
 - Imgstore
 - Ropity
 - Fermat
 - ICTF-Band
+- Bopity
 
 
 ---
