@@ -23,7 +23,6 @@ And in this writeup I'll go through the challenges which I solved
 ### Pwn
 - Imgstore
 - Ropity
-- Onewrite
 
 
 ---
@@ -1153,7 +1152,25 @@ if __name__ == '__main__':
     main()
 ```
 
+Running it works
+![image](https://github.com/user-attachments/assets/7fc9a71e-04ed-4943-ba19-b924709e7e49)
+![image](https://github.com/user-attachments/assets/9ef83b2c-aa11-42fd-ab89-79b8dccd1af8)
 
+```
+Flag: ictf{b4byy_f3rM4T_5Tr1nn66S}
+```
+
+#### Ropity
+![image](https://github.com/user-attachments/assets/a541eff1-744f-4366-bb76-64c2399f5ff0)
+
+We are given a binary, checking the file type and protections enabled showed this
+![image](https://github.com/user-attachments/assets/52986546-c8f4-414b-a577-bd0b1bbf58d0)
+
+So we are working with a x64 executable which is dynamically linked and not stripped
+
+And we can see that the only protections enabled is `NX` which prevents shellcode execution on the stack (NOT LIKE WE NEED THIS)
+
+I ran the binary to get an overview of what it does
 
 
 
