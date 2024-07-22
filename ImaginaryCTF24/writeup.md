@@ -23,6 +23,7 @@ And in this writeup I'll go through the challenges which I solved
 ### Pwn
 - Imgstore
 - Ropity
+- Fermat
 
 
 ---
@@ -1383,7 +1384,76 @@ Running it works
 Flag: ictf{pop_rdi_L}
 ```
 
+#### Fermat
+![image](https://github.com/user-attachments/assets/381ca118-a11b-4e5e-a89d-f66fc3ea1bb8)
 
+After downloading the attached file I patched the binary to use the libc provided
+
+Here's the file type and protection enabled on it
+![image](https://github.com/user-attachments/assets/9d7a25e4-2573-4de2-9ff4-883be5895efc)
+
+So we are working with a x64 binary which is dynamically linked and not stripped
+
+From the protections enabled we can see that only the `Stack Canary` is disabled hmmm
+
+I ran the binary to get an overview of what it does
+![image](https://github.com/user-attachments/assets/0a3ad403-dc01-41cb-96cc-666002bddb9f)
+
+It seems to receive our input then print it out back
+
+Using IDA i decompiled the binary, here's the main function
+![image](https://github.com/user-attachments/assets/2f7fade0-69fe-42b9-818d-4acdcf033a2b)
+
+```c
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  char buf[256]; // [rsp+0h] [rbp-100h] BYREF
+
+  setbuf(stdin, 0LL);
+  setbuf(_bss_start, 0LL);
+  read(0, buf, 296uLL);
+  if ( strchr(buf, 'n') )
+    __assert_fail("strstr(buf, \"n\") == NULL", "vuln.c", 0xEu, "main");
+  printf(buf);
+  return 0;
+}
+```
+
+Pretty straightforward! 
+- It receives at most 296 bytes of input into a buffer that can only hold up 256 bytes of data
+- It checks for the occurrence of `n` in the `buf` and if the assertion fails it would exit
+- Else it would print our `buf` and returns
+
+There are two bugs present here:
+- Buffer overflow
+- Format string bug
+
+How do we go about exploiting this?
+
+Because the binary has no function after `printf` it would tend to return to `__libc_start_main`, and since `PIE` is enabled we can't easily control the return address to jump back to `main`
+
+First thing I tried doing was getting the offset required to overwrite the return address using the standard `pattern create` on `gdb-gef` but I ran into this issue
+![image](https://github.com/user-attachments/assets/e96936c8-761f-426b-920a-dcf962e6da11)
+![image](https://github.com/user-attachments/assets/0f310654-0973-4da3-8876-1620df8de2bf)
+
+It exists because the `assertion` was triggerd
+
+And what triggered it is because the cyclic pattern had occurrence of `n`
+
+So I decided to calculate the offset manually 
+
+From the decompilation we have this
+![image](https://github.com/user-attachments/assets/187eb4e6-643c-46dc-bba2-c44d7362ed46)
+
+We have variable `buf` which is a buffer that has size of 256 bytes
+
+Since that's the only variable present on the stack frame the difference between it and the return address is going to be:
+
+```
+256 + 8 = 264
+```
+
+The 8 comes from the fact that the saved rbp is present therefore the offset is `264`
 
 
 
