@@ -1289,7 +1289,12 @@ To get around this, we will use something called the GOT (Global Offset Table). 
 - The binary maintains two tables: the PLT (Procedure Linkage Table) and the GOT (Global Offset Table).
 - The entries of the PLT are called PLT stubs. Each external function called by the binary has a corresponding stub. Each stub jumps to an address stored in a corresponding GOT entry.
 - The first time an external function, such as fgets, is called, its address inside libc is dynamically resolved using a function called `__dl_runtime_resolve`. However, calling this function is costly, so the address returned by this function is stored in the GOT entry.
-- Subsequent calls to the function can now jump to the address stored in the GOT instead of calling `__dl_runtime_resolve again`. This means that if we can overwrite the GOT entry of a function, such as fgets( which we can with our arbitrary write primitive), with another address in an executable region (such as printfile), all subsequent calls to the function will instead go to the function we want! This gives us our complete exploit
+- Subsequent calls to the function can now jump to the address stored in the GOT instead of calling `__dl_runtime_resolve again`. This means that if we can overwrite the GOT entry of a function, such as fgets( which we can with our arbitrary write primitive), with another address in an executable region (such as printfile), all subsequent calls to the function will instead go to the function we want.
+
+With that we can leverage this to complete our exploit
+
+My exploit goes as follow:
+-  Ov
 
 
 
