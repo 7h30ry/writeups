@@ -697,7 +697,7 @@ def iterate(i):
 
 And after some tests, I figured out that this algorithm basically modifies the characters deterministically, which means that the characters are modified independently of each other.
 
-With that I wrote a brute force script which just tries all printable characters and check if it equals the modified flag
+With that I wrote a brute force script which just tries all printable characters passes it into the encryption algorithm and check if it equals the modified flag at the same index
 
 Here's my [solve](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/Unconditional/solve.py)
 
