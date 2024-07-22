@@ -1042,7 +1042,7 @@ I won't go through how i got those leaks because i'm tired and i've done that mu
 
 So i'll just show you my exploit
 
-Here's my solve [script]()
+Here's my solve [script](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/Imgstore/solve.py)
 
 ```python
 #!/usr/bin/env python3
