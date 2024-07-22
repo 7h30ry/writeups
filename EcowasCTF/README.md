@@ -2223,36 +2223,13 @@ Now that is settle we need to know the right input that meets this condition
 input ^ 0x6b8b4567 = 0xdeadc0de
 ```
 
-I just used `z3` to find the right input value that meets that constaint
+To get that we just xor the other two values together because xor is symmetric
 
-Here's my solve [script](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ecowas23/prequal/reverse%20engineering/sesame/solve.py)
+Here's my solve script
 
 ```python
-from z3 import *
-
-def sesame(value):
-    solver = Solver()
-
-    key = BitVec('key', 32)
-
-    constraint = (key ^ value) == 0xdeadc0de
-
-    solver.add(constraint)
-
-    if solver.check() == sat:
-        model = solver.model()
-        solution_key = model[key].as_long()
-        return solution_key
-    else:
-        return None
-
-value = 0x6b8b4567
-
-solution = sesame(value)
-if solution is not None:
-    print(f"Solution found: key = 0x{solution:08X}")
-else:
-    print("No solution found.")
+input = 0xdeadc0de ^ 0x6b8b4567
+print(input)
 ```
 
 Running it gives this
