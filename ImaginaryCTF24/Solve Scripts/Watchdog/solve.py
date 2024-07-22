@@ -32,9 +32,6 @@ X = [BitVecVal(x, 64) for x in X]
 enc = [BitVecVal(enc, 64) for enc in enc]
 
 for i in range(5, 42):
-    # s.add(flag[i] >= 0x20)
-    # s.add(flag[i] <= 0x7e)
-    # a-zA-Z0-9_
     s.add(Or(And(flag[i] >= 0x30, flag[i] <= 0x39),
              And(flag[i] >= 0x41, flag[i] <= 0x5a),
              And(flag[i] >= 0x61, flag[i] <= 0x7a),
