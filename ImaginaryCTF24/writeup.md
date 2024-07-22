@@ -832,6 +832,13 @@ Flag: ictf{that_is_a_lot_of_equations_n2u1iye21azl21}
 
 #### Imgstore
 
+![image](https://github.com/user-attachments/assets/238d2190-15e9-40ca-9846-778d12c582ff)
+
+I'm getting tired of making this writeup so i'll make it quick
+
+The attached executable came with it's shared library as to which i patched using `pwninit`
+
+When you run the program you'd get this
 
 
 
