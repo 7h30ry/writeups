@@ -330,7 +330,7 @@ Using Ghidra I decompiled the binary and here's the main function
 
 Because `debug_info` is enabled, it makes life much easier for me since I'm not familiar with rust internals or the Rust programming language. This way, I won't end up trying to reverse-engineer an internal implementation 😅
 
-Ok let's continue
+Ok let us continue
 
 ```c
 void main(int param_1,u8 **param_2)
