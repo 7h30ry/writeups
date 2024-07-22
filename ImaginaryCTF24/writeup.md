@@ -1721,7 +1721,7 @@ In my case i used slot value as `6` and album count as `0`
 
 And from there I leaked libc and ret2libc
 
-Here's my exploit [script]()
+Here's my exploit [script](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/ICTF-Band/solve.py)
 
 ```python
 #!/usr/bin/env python3
@@ -1818,7 +1818,20 @@ if __name__ == '__main__':
     main()
 ```
 
+Running it works
+![image](https://github.com/user-attachments/assets/b645ef38-3e04-4df9-9a4a-f7755c2be2e5)
 
+```
+Flag: ictf{F0rg3t_t0_pUt_c4N4r1y_pr0T3ction5}
+```
+
+So that's all for now
+
+I managed to solve WatchDog and Bopity (this was Ropity part2 which required getting shell xd)
+
+But i'm so tired because i've been writing for hours now LMAO
+
+So incase you want the solve script you can find it [here]()
 
 
 
