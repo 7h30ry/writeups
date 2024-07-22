@@ -24,6 +24,7 @@ And in this writeup I'll go through the challenges which I solved
 - Imgstore
 - Ropity
 - Fermat
+- ICTF-Band
 
 
 ---
@@ -1583,6 +1584,23 @@ Running it works
 Flag: ictf{im_really_out_of_format_string_ideas.}
 ```
 
+#### ICTF-Band
+![image](https://github.com/user-attachments/assets/f50195ea-5e32-4271-b50e-db522136d3cd)
+
+After downloading the attached file and patching it to use the remote libc I checked the file type
+![image](https://github.com/user-attachments/assets/5d31bb32-4df9-4ea1-9b8c-ae153f122f22)
+
+We are working with a 64bits binary which is dynamically linked and not stripped
+
+All protections are enabled except Stack Canary
+
+I ran it to get an overview of what it does
+![image](https://github.com/user-attachments/assets/fc55b0f3-d026-4619-9daf-4951ded8d4fa)
+
+Oh well, let's go ahead to reverse engineer it
+
+I used IDA and here's the main function
+![image](https://github.com/user-attachments/assets/cdacdc01-b328-4a1d-be65-700db62814b7)
 
 
 
