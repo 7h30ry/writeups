@@ -1297,7 +1297,7 @@ Here's how my exploit goes:
 - Use the arbitrary write primitive to overwrite the GOT entry for `fgets` with `printfile`, and to write `flag.txt\0` in a writable region
 - Call the `main` function again, and this time set `rbp` to point 8 bytes after the address of `flag.txt\0`. This will cause the function to move a pointer to this address into rdi, but this time because we’ve overwritten the GOT entry, when fgets will get called we’ll jump to `printfile` instead. There’s another small problem to solve: since we’re changing the of `rbp` and then executing a `leave` instruction at the end of main, the value of `rsp` will also get changed to point to the new value of `rbp`, so we’ll have to write our return addresses directly after `rbp` so that when ret is executed it’ll pop the addresses we want.
 
-Solve [script]()
+Solve [script](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/Ropity/solve.py)
 
 ```python
 #!/usr/bin/env python3
