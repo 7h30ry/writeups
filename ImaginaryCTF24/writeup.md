@@ -1827,13 +1827,17 @@ Flag: ictf{F0rg3t_t0_pUt_c4N4r1y_pr0T3ction5}
 
 So that's all for now
 
-I managed to solve WatchDog and Bopity (this was Ropity part2 which required getting shell xd)
+I managed to solve `WatchDog`  and `Bopity` (this was Ropity part2 and it required getting shell xd)
 
 But i'm so tired because i've been writing for hours now LMAO
 
-So incase you want the solve script you can find it [here]()
+So incase you want the solve script you can find it [here](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/Watchdog/solve.py)
 
+For those of you who managed to read as far as this TYSM
 
+But if that wasn't the case still TY 🙏
+
+Sayonara 😅
 
 
 
