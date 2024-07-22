@@ -60,7 +60,7 @@ After downloading the zip file from the file sharing server I uncompressed it wh
 
 You can ignore the `test.php` as it wasn't there initially (i created it for debugging0
 
-Let's check out the source code but before that it's good practice to check the `Dockerfile`
+Let's check out the source code but before that it's a good practice to check the `Dockerfile`
 ![image](https://github.com/user-attachments/assets/92d25f25-1bbd-4e93-9b2c-f6b7f20ceff2)
 
 Basically this Dockerfile would install `php:7-apache` then do some web server configuration
@@ -72,7 +72,7 @@ And what i mean by that is this:
 
 Ok at this point we know that the `flag.txt` file would be of a random name stored in `/`
 
-That means we might need to get `RCE` to get the name and it's content
+That means we might need to get `RCE` to get the name and its content
 
 Moving on we can check the application source code which is `index.php`
 ![image](https://github.com/user-attachments/assets/fc9faa9d-7a84-4ec8-bf1b-16afea34e301)
@@ -1277,12 +1277,19 @@ When I run it in a debugger
 We can see that it's going to read our input and store it in `data_start` which is the hardcoded address `0x404020`
 
 But after it does that the `rdi` doesn't hold our string read in but instead it's in the `rax`
+![image](https://github.com/user-attachments/assets/7478c121-8683-423f-8b73-d020391c6561)
 
 What do we do about this?
 
 Initially I tried looking for gadgets that can `mov rdi, rax; ret` but too bad I didn't see any
 
 So what's the way around this?
+
+To get around this, we will use something called the GOT (Global Offset Table). Since most C binaries are dynamicallly linked, the binary has to somehow know how to jump to external locations, such as the address of fgets inside libc. This is done as follows:
+- The binary maintains two tables: the PLT (Procedure Linkage Table) and the GOT (Global Offset Table).
+- The entries of the PLT are called PLT stubs. Each external function called by the binary has a corresponding stub. Each stub jumps to an address stored in a corresponding GOT entry.
+- The first time an external function, such as fgets, is called, its address inside libc is dynamically resolved using a function called `__dl_runtime_resolve`. However, calling this function is costly, so the address returned by this function is stored in the GOT entry.
+- Subsequent calls to the function can now jump to the address stored in the GOT instead of calling `__dl_runtime_resolve again`. This means that if we can overwrite the GOT entry of a function, such as fgets( which we can with our arbitrary write primitive), with another address in an executable region (such as printfile), all subsequent calls to the function will instead go to the function we want! This gives us our complete exploit
 
 
 
