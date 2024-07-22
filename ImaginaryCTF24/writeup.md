@@ -1499,7 +1499,7 @@ ret
 system
 ```
 
-Here's my final exploit
+Here's my final [exploit](https://github.com/7h30ry/writeups/blob/main/ImaginaryCTF24/Solve%20Scripts/Fermat/solve.py)
 
 ```python
 #!/usr/bin/env python3
