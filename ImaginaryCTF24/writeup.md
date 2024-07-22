@@ -19,7 +19,6 @@ And in this writeup I'll go through the challenges which I solved
 - Rust
 - Unconditional
 - Absolute Flag Checker
-- Watchdog
 
 ### Pwn
 - Imgstore
@@ -826,7 +825,12 @@ Running it takes quite a lot of time but it worked!
 Flag: ictf{that_is_a_lot_of_equations_n2u1iye21azl21}
 ```
 
+---
+---
 
+### Pwn
+
+#### Imgstore
 
 
 
