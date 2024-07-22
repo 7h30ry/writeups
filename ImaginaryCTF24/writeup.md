@@ -1183,12 +1183,13 @@ Here's the main function
 Very small code
 
 The available functions are
+
 ![image](https://github.com/user-attachments/assets/f883a214-3c83-46a2-90a4-69b2432af061)
 
 There's a function which caught my attention and it's called `printfile`
 ![image](https://github.com/user-attachments/assets/a024b8e6-a35d-4a24-a97e-0dca58bf28e4)
 
-And basically what it does is to `open` the file stored in the `rdi` and prints it's content to `stdout`
+And basically, what it does is open the file stored in the rdi register and print its contents to stdout
 
 Ok we can tell at this point our goal would be to call this function because it wasn't referenced in the main function
 
@@ -1211,9 +1212,35 @@ I checked for available gadgets and to be surprise (not) i saw that there wasn't
 ![image](https://github.com/user-attachments/assets/be6d3c92-7bf7-4062-b327-e086ea00bc25)
 ![image](https://github.com/user-attachments/assets/40c81491-43d8-4a1d-9cab-0e088e333907)
 
-Well from the challenge name we can tell our goal would be to use the gadgets to rop around this issue LOL
+And note `rop gadgets` are gadgets that pop values from the stack into a regsiter, hence writing arbitrary values to registers
 
+How do we go around this issue?
 
+We need to look at the assembly closely
+
+```c
+; int __fastcall main(int argc, const char **argv, const char **envp)
+public main
+main proc near
+
+s= byte ptr -8
+
+; __unwind {
+endbr64
+push    rbp
+mov     rbp, rsp
+sub     rsp, 10h
+mov     rdx, cs:__bss_start ; stream
+lea     rax, [rbp+s]
+mov     esi, 100h       ; n
+mov     rdi, rax        ; s
+call    _fgets
+nop
+leave
+retn
+; } // starts at 401136
+main endp
+```
 
 
 
