@@ -1216,7 +1216,7 @@ And note `rop gadgets` are gadgets that pop values from the stack into a regsite
 
 How do we go around this issue?
 
-We need to look at the assembly closely
+We need to look at the disassembly more closely
 
 ```c
 ; int __fastcall main(int argc, const char **argv, const char **envp)
@@ -1241,6 +1241,78 @@ retn
 ; } // starts at 401136
 main endp
 ```
+
+Remember the fact that we can control the `rip` which means we can redirect the program execution to anywhere in memory
+
+Looking at how `fgets` setups the register we see this:
+
+```
+RDI -> The buffer to write to
+RSI -> The number of characters to read
+RDX -> File stream to read from
+```
+
+After `fgets` returns, it puts a pointer to the buffer it wrote to into the `rax` register
+
+This is how the buffer stored in `rdi` is gotten from:
+
+```
+lea rax, [rbp-8]
+mov rdi, rax
+```
+
+What we can do here is to make fgets write `flag.txt\0` into memory then we look for a gadget that lets us move between register preferably `rax, rdi`
+
+Because `rdi` is gotten from `rbp-8` we need to control the `rbp` register and it should hold the address of where we want to write to
+
+Luckily there's a `pop rbp; ret` gadget
+![image](https://github.com/user-attachments/assets/a44fb75f-9ba8-44b7-b0d2-889b5fcc5151)
+
+Here's a POC which shows that it works!
+![image](https://github.com/user-attachments/assets/5b3c680c-7fbb-4212-b12b-c5ae3c6876b1)
+
+When I run it in a debugger
+![image](https://github.com/user-attachments/assets/e2dc181a-2789-45ab-837a-0db919b9c4d7)
+
+We can see that it's going to read our input and store it in `data_start` which is the hardcoded address `0x404020`
+
+But after it does that the `rdi` doesn't hold our string read in but instead it's in the `rax`
+
+What do we do about this?
+
+Initially I tried looking for gadgets that can `mov rdi, rax; ret` but too bad I didn't see any
+
+So what's the way around this?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
