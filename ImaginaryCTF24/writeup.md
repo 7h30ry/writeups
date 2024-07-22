@@ -1602,6 +1602,116 @@ Oh well, let's go ahead to reverse engineer it
 I used IDA and here's the main function
 ![image](https://github.com/user-attachments/assets/cdacdc01-b328-4a1d-be65-700db62814b7)
 
+The first function after decompilation shows this
+![image](https://github.com/user-attachments/assets/057bf46f-26a3-439f-94bc-d9478adc5051)
+
+This setup disables buffering on `stdin, stdout & stderr`
+
+So I renamed the function
+
+```c
+int setup()
+{
+  alarm(0x78u);
+  setvbuf(stdout, 0LL, 2, 0LL);
+  setvbuf(stdin, 0LL, 2, 0LL);
+  return setvbuf(stderr, 0LL, 2, 0LL);
+}
+```
+
+The second function seems to be the menu function
+![image](https://github.com/user-attachments/assets/c663520d-3889-4e40-98a3-e33a63796b21)
+
+And after reversing it this is how it looks like
+![image](https://github.com/user-attachments/assets/34803a9c-665c-4cca-a4b8-d81ebc0e0087)
+
+```c
+__int64 menu()
+{
+  int choice; // [rsp+Ch] [rbp-4h] BYREF
+
+  do
+  {
+    sub_1338();
+    puts("[1]. Name a song.");
+    puts("[2]. Join the band.");
+    puts("[3]. Write lyrics.");
+    puts("[4]. Exit.");
+    printf(">> ");
+    __isoc99_scanf("%1d", &choice);
+    getchar();
+    if ( choice == 4 )
+    {
+      puts(byte_3080);
+      printf("\x1B[1;33m");
+      puts("Goodbye!");
+      printf("\x1B[0m");
+    }
+    else
+    {
+      if ( choice <= 4 )
+      {
+        switch ( choice )
+        {
+          case 3:
+            write();
+            continue;
+          case 1:
+            name();
+            continue;
+          case 2:
+            join();
+            continue;
+        }
+      }
+      puts(byte_3080);
+      printf("\x1B[1;33m");
+      puts("[/] Invalid option..");
+      printf("\x1B[0m");
+      puts(byte_3080);
+    }
+  }
+  while ( choice != 4 );
+  return exit_0();
+}
+```
+
+The only function which allows us give it input is `name and exit`
+
+And the bug resides there
+
+I won't go through it in details i'll just give an overview of it
+
+```c
+char ptr[52]
+
+ printf("Would you like to buy one or maybe more? [y/n]: ");
+      __isoc99_scanf("%c", &v4);
+      if ( v4 == 121 )
+      {
+        printf("The album should be pre-ordered. Tell us how many you want, we will contact you soon: ");
+        __isoc99_scanf("%d", &v2);
+        getchar();
+        printf("Tell us your e-mail: ");
+        fread(ptr, 1uLL, v2, stdin);
+        puts(byte_3080);
+        printf("\x1B[1;33m");
+        puts("[YOUR DATA] Please validate before continuing: ");
+        printf("\x1B[0m");
+        puts(ptr);
+        puts(byte_3080);
+        printf("It's verified [y/n]: ");
+        __isoc99_scanf("%c", &v3);
+```
+
+The bug is that it allows us specify the size to read in into the `ptr` array 
+
+We can overflow that and overwrite the null byte therefore when it calls `puts(ptr)` we would get a libc leak
+
+How i know it's a libc leak is because i checked the stack when it's about to call `puts(ptr)` and the value after our input is a libc address
+
+
+
 
 
 
