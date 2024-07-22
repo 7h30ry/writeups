@@ -1020,9 +1020,9 @@ unsigned __int64 __fastcall sub_1D77(int a1)
 }
 ```
 
-Basically this is a function that would receive our input is the parameter passed into it is `2`
+Basically this is a function that would receive our input if the parameter passed into it is `2`
 
-And it's vulnerable to buffer overflow at this place:
+And it's vulnerable to buffer overflow:
 
 ```c
 char s[104];
