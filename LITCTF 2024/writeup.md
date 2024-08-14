@@ -776,18 +776,23 @@ Flag: LITCTF{t0d4y_15_l1t3rally_th3_d4y_b3f0re_the_c0nt3st}
 ### PWN WRITEUP SOON
 
 Function Pairing
+
 ![image](https://github.com/user-attachments/assets/f8ba6ccb-cec0-450a-b127-04d89ae7c262)
 
 Infinite Echo
+
 ![image](https://github.com/user-attachments/assets/fcb4bede-6eaa-4cf6-a5d2-3eb701f7bcb4)
 
 Recurse
+
 ![image](https://github.com/user-attachments/assets/957bb89e-2af8-4abe-ae80-649425e6dd01)
 
 W4dup 2de
+
 ![image](https://github.com/user-attachments/assets/25988898-c782-402a-a3ff-7355040c29b4)
 
 Iloveseccomp
+
 ![image](https://github.com/user-attachments/assets/4b536045-de7c-4de9-a0e1-5cfedb38e98b)
 
 
