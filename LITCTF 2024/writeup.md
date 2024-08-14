@@ -29,3 +29,37 @@ This writeup contains the challenge to which I solved during the CTF
 
 
 Ok let's start and note that i won't give very detailed solution to some of the challenges
+
+## Web
+
+#### Anti Inspect
+aaa
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
