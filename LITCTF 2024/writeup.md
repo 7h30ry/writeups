@@ -689,4 +689,113 @@ And we have the flag 🙂
 Flag: LITCTF{bur9r5_c4n_b_pi22a5_if_th3y_w4n7_2}
 ```
 
+#### Revsite1
+![image](https://github.com/user-attachments/assets/06525b86-9803-4b65-96c5-cf0ba03dc1ca)
+
+We are given a url and on accessing it i saw this
+![image](https://github.com/user-attachments/assets/167f9a05-3f69-4825-85f5-18f558812af5)
+
+Basically there's a checkbox that receives our input which is the flag and maybe if it's right it would let us know
+
+Looking at the page source i saw this
+![image](https://github.com/user-attachments/assets/5a6c91ca-559f-4606-a0d5-0678cb72c898)
+
+We can see it's importing a script and also does this
+
+```js
+	<script>
+			function checkFlag(){
+				let flag = document.getElementById("flag").value;
+				let flag_len = flag.length+1;
+				
+				let flag_arr = Array(flag_len).fill(0);
+				for(let i = 0; i < flag_len-1; i++){
+					flag_arr[i] = flag.charCodeAt(i);
+				}
+				
+				let flag_ptr = Module._malloc(flag_len);
+				Module.HEAPU8.set(new Uint8Array(flag_arr), flag_ptr);
+				let res = Module.cwrap("check_flag", "number", ["number"])(flag_ptr);
+				Module._free(flag_ptr);
+				
+				if(res == 1){
+					document.getElementById("right").innerHTML = "ur right :)";
+					document.getElementById("wrong").innerHTML = "";
+				}else{
+					document.getElementById("right").innerHTML = "";
+					document.getElementById("wrong").innerHTML = "ur wrong :(";
+				}
+			}
+		</script>
+```
+
+This is Web Assembly (WASM)
+
+```
+WebAssembly is an open standard that allows the execution of binary code on the web. This standard, or format code, lets developers bring the performance of languages like C, C++, and Rust to the web development area.
+```
+
+If we take a look at the dev tools we can see the wasm file
+![image](https://github.com/user-attachments/assets/a7b82052-af3e-41b1-9439-661bdbaa4e52)
+
+I downloaded it
+![image](https://github.com/user-attachments/assets/ef16542f-b6b6-42ae-b69e-da684ed04689)
+
+From the above js code we can see that our input is going to be passed as a parameter to `check_flag`
+
+We need to figure out what this function does
+
+Ghidra has a plugin which decompiles a wasm file you can get it [here](https://github.com/nneonneo/ghidra-wasm-plugin/releases)
+
+At this point I imported the wasm file into Ghidra and here's the layout
+![image](https://github.com/user-attachments/assets/fbb028af-2ad6-4016-81b0-6a796943942b)
+
+The `check_flag` function is in the `Exports`
+![image](https://github.com/user-attachments/assets/015d629a-f47d-4960-b258-829852253c56)
+
+Here's the decompiled [code]()
+![image](https://github.com/user-attachments/assets/ae058fce-c4ee-4bc5-abcd-d7509149a16a)
+![image](https://github.com/user-attachments/assets/c2959407-b9aa-4fb8-975b-d7252c6d911f)
+
+We can see it setups some value on the stack then compares our input against the value using `strcmp`
+
+I just decoded those values and got the flag
+
+```python
+''.join(chr(x) for x in [76, 73, 84, 67, 84, 70, 123, 116, 48, 100, 52, 121, 95, 49, 53, 95, 108, 49, 116, 51, 114, 97, 108, 108, 121, 95, 116, 104, 51, 95, 100, 52, 121, 95, 98, 51, 102, 48, 114, 101, 95, 116, 104, 101, 95, 99, 48, 110, 116, 51, 115, 116, 125, 0, 0, 0, 0, 0, 0, 0])
+'LITCTF{t0d4y_15_l1t3rally_th3_d4y_b3f0re_the_c0nt3st}\x00\x00\x00\x00\x00\x00\x00'
+```
+
+We can confirm it's the flag
+![image](https://github.com/user-attachments/assets/f9afb414-1f8e-4229-8364-b788715bc019)
+
+```
+Flag: LITCTF{t0d4y_15_l1t3rally_th3_d4y_b3f0re_the_c0nt3st}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
