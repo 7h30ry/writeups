@@ -524,7 +524,7 @@ First we need it to be in the flag format and make sure it's length is 42
 - LITCTF{..................................}
 ```
 
-Based on function `cheese` , working on the string we get this:
+Based on function `cheese()` , working on the string we get this:
 ![image](https://github.com/user-attachments/assets/7cf1cc02-ada0-4867-97b7-6f5a00bf3d92)
 
 ```python
@@ -563,9 +563,55 @@ def _meat(s):
 - LITCTF{......_..._._.i..a._if_th.y_w.n._.}
 ```
 
+We can't work on `pizzaSauce()` because it's dependent on surrounding characters so we need to first process the numbers in veggies so that `isLetter` works
 
+Working on function `veggies()`, i got this
+![image](https://github.com/user-attachments/assets/56ba0683-b5c6-44b6-9dfb-9d2d9811acc3)
 
+I did the math operations by hand
 
+```python
+def veggies(s):
+    """
+    flag[22] = '2' # veg[3] == 2 
+    flag[23] = '2' # veg[3] == veg[4]
+    flag[15] = '4' # veg[2]/veg[3]/veg[4] == 1
+    flag[12] = '5' # veg[1] * veg[2] == 20
+    flag[10] = '9' # veg[0] + veg[1] == 14
+    flag[25] = '5' # veg[4] - veg[5] == -3
+    flag[32] = '3' # pow(veg[5], veg[6]) == 125
+    flag[36] = '4' # veg[7] == 4
+    flag[38] = '7' or '3' # veg[8] % veg[7] == 3
+    flag[40] = '2' # veg[veg.length-1] == 2
+    flag[38] = '7' # veg[8] + veg[9] = 9
+    """
+
+    idx = {
+        23: '2',
+        15: '4',
+        12: '5',
+        10: '9',
+        25: '5',
+        32: '3',
+        36: '4',
+        38: '7',
+        40: '2',
+        38: '7'
+    }
+
+    s = s
+
+    for key, val in idx.items():
+        s[key] = val
+    
+    return s
+```
+
+```
+- LITCTF{...9.5_.4._._.i.2a5_if_th3y_w4n7_2}
+```
+
+Now we can 
 
 
 
