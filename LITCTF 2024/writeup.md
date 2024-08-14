@@ -141,7 +141,7 @@ Starts the web app to listen on port 3000 or the port specified in the environme
 Let's take a look at the routes now:
 
 - Login: It's going to make sure it's a valid user then sign the username and setting admin to `false`
-- 
+  
 ![image](https://github.com/user-attachments/assets/c9d73009-7a1f-408f-b95a-aa23a7540888)
 
 - Signup: It's going to basically just add the user to the accounts array and sign the username and setting admin to `false`
@@ -156,7 +156,7 @@ Because this verification does check the signature we can't go around this excep
 
 We can easily do that because we know the jwt secret 
 
-I wrote a script to generate a token for me
+I wrote a [script](https://github.com/7h30ry/writeups/blob/main/LITCTF%202024/Solve%20Scripts/JWT-2/generate.js) to generate a token for me
 ![image](https://github.com/user-attachments/assets/00311e7d-0400-457f-86d0-86ee0acc517e)
 
 That's pretty much just copy paste from the original server code with some modification
@@ -168,11 +168,89 @@ Running it i get a token and i used that to get the flag
 Flag: LITCTF{v3rifyed_thI3_Tlme_1re4DV9}
 ```
 
+#### Traversed
+![image](https://github.com/user-attachments/assets/36ba1ec0-f2b5-4394-9802-11cd84fa8f10)
+
+Accessing the provided url shows this
+
+From the challenge name you can probably tell this is going to be some sort of LFI
+![image](https://github.com/user-attachments/assets/709051c1-e0e4-424d-af23-fc3638cded9f)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    Welcome! The flag is hidden somewhere... Try seeing what you can do in the url bar.
+    There isn't much on this page...
+  </body>
+</html>
+```
+
+The description on the web page suggests that we should play around with the url bar
+
+I just guessed the parameter to be `page` and i was able to include any file
+![image](https://github.com/user-attachments/assets/9e9a0d99-f305-45d2-aec2-00138218bf3f)
+
+You could as well attempted to fuzz?
+
+```
+ffuf -c -u "http://litctf.org:31778/?FUZZ=../../../../../etc/passwd" -w /usr/share/seclists/Discovery/Web-Content/burp-parameter-names.txt -fs 117,965 -mc all
+```
+
+But doing that I got this
+![image](https://github.com/user-attachments/assets/c173c0b3-f8b9-4a4d-af10-e914266ebea8)
+
+Well i guess we just needed to guess the parameter
+
+Ok now that we can include any file where's the flag
+
+The challenge didn't specify the flag name nor the location so we need to figure that
+
+I assumed the name would be `flag.txt`
+
+Moving on I checked the content of `/etc/passwd`
+![image](https://github.com/user-attachments/assets/34e735d8-1935-4e4b-a297-5149d141f056)
+
+We have a user called `node` so I checked the directory if the flag is there but it wasn't
+![image](https://github.com/user-attachments/assets/44bf9286-ca68-43f3-85bf-e75160e2c5e6)
+
+I also tried to retrieve the web app source code but that failed
+![image](https://github.com/user-attachments/assets/fd324fd4-6458-4e59-9737-0959abae6402)
+![image](https://github.com/user-attachments/assets/10fd0e85-161e-4497-863f-95184ec0dc13)
 
 
+Next thing i did was to read the environment variable file
+![image](https://github.com/user-attachments/assets/a785a32b-1547-4bd9-9728-74828297bd9d)
 
+It downloaded and i checked the content
+![image](https://github.com/user-attachments/assets/e80cc063-793c-4957-91cb-7cb3aef00a64)
 
+```
+NODE_VERSION=16.20.2
+HOSTNAME=ac58ff1071df
+YARN_VERSION=1.22.19
+BUN_INSTALL=/root/.bun
+HOME=/root
+PATH=/root/.bun/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PWD=/app
+```
 
+The path to this web app on the filesystem is `/app`
+
+So i checked for the flag there
+![image](https://github.com/user-attachments/assets/497a2106-3c01-40c1-89d2-662893ec572a)
+
+We could have also gotten that using this
+![image](https://github.com/user-attachments/assets/a924f50e-2fda-4c80-92d2-2c7ac85a6bc9)
+
+```
+Flag: LITCTF{backtr@ked_230fim0}
+```
 
 
 
