@@ -395,19 +395,33 @@ Flag: LITCTF{k3F7zH}
 We are given the Java source code as an attachement
 
 Downloading it and checking the content shows this
-![image](https://github.com/user-attachments/assets/9095b45e-296d-445c-8968-7fcc6df60561)
 ![image](https://github.com/user-attachments/assets/24bdae4a-972c-4b64-b86b-c3a6f4be14cd)
+![image](https://github.com/user-attachments/assets/9095b45e-296d-445c-8968-7fcc6df60561)
+![image](https://github.com/user-attachments/assets/d479bec7-2779-40e1-9e61-0078141aa904)
 
+I started from the main function
+![image](https://github.com/user-attachments/assets/34705ba1-feb1-4b5c-a747-64a381229ef7)
 
+- It receives our input which is the flag
+- Sets a boolean variable `gotFlag` to `true`
+- Makes sure the length of the input is 42
+- Calls the `bun` function and if the result returned from the function isn't `true` it sets `gotFlag` to `false`
 
+Here's what function `bun` does
+![image](https://github.com/user-attachments/assets/803354fe-208a-418c-95d5-524089fa1a8a)
 
+- It basically makes sure that the first 7 characters equal the flag format `LITCTF{` and the last character equals `}`
 
+Moving on, it calls some function on our input and does some checks on the `gotFlag` variable
+![image](https://github.com/user-attachments/assets/62415151-d822-4acf-a080-f1169c6059ee)
 
+This are the function it calls:
+- cheese()
+- meat()
+- pizzaSauce()
+- veggies()
 
-
-
-
-
+We need to make sure that this function returns `true`
 
 
 
