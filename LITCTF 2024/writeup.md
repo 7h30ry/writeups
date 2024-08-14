@@ -1,4 +1,4 @@
-<h3> LITCTF 2024 </h3>
+![image](https://github.com/user-attachments/assets/68ca7abb-ebf4-4e83-b1d8-dbb77acb0394)![image](https://github.com/user-attachments/assets/7c90ff84-da16-4103-9f49-fac30164815e)<h3> LITCTF 2024 </h3>
 
 ![image](https://github.com/user-attachments/assets/fd31c0ee-7551-4295-9e93-23c24cc9a468)
 
@@ -251,6 +251,44 @@ We could have also gotten that using this
 ```
 Flag: LITCTF{backtr@ked_230fim0}
 ```
+
+#### KirbyTime
+![image](https://github.com/user-attachments/assets/75586b0c-7f47-470a-b4a4-e90fc3384536)
+
+We are given the application source code
+![image](https://github.com/user-attachments/assets/823b5646-86c7-44bf-8c25-1c7e47ad651d)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
