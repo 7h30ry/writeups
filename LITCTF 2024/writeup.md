@@ -6,21 +6,21 @@ Hey guys, `0x1337` here.
 
 This writeup contains the challenge to which I solved during the CTF
 
-### Web
+### Web (5/6)
 - Anti-Inspect
 - Jwt-1
 - Jwt-2
 - Traversed
 - KirbyTime
 
-### Reversing
+### Reversing (5/6)
 - Forgotten Message
 - Kablewy
 - Burger Reviewer
 - Revsite1
 - Watchdog
 
-### Pwn
+### Pwn (5/8)
 - Function Pairing
 - Infinite Echo
 - Recurse
