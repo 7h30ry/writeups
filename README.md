@@ -34,4 +34,4 @@
 - [LITCTF 2024](https://7h30ry.github.io/writeups/)
 
 ## Reverse Engineering
-- [MetaCTF July 2024](https://github.com/7h30ry/writeups/blob/main/Reverse-Engineering/FlagAppraisal.html)
+- [MetaCTF July 2024](https://7h30ry.github.io/writeups/Reverse-Engineering/FlagAppraisal.html)
