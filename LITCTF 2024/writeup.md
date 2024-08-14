@@ -793,9 +793,3 @@ Flag: LITCTF{t0d4y_15_l1t3rally_th3_d4y_b3f0re_the_c0nt3st}
 
 
 
-
-
-
-
-
-
