@@ -482,12 +482,21 @@ public static boolean pizzaSauce(String s) {
 }
 ```
 
-
-
-
-
-
-
+- This function performs two main checks on a string s
+  - Checking digits
+    - The code checks the characters in the string s from index 7 to 20
+    - The isDigit array indicates whether the character at each position in the specified range should be a digit (true) or not (false)
+    - If the character at any of these positions doesn't match the expected digit status, the function returns false
+  - Checking matching characters
+    - The code initializes two pointers, a starting at 7 and b starting at 20, and a character array sauce which contains specific characters
+    - It checks whether the characters in s at positions a and b match the corresponding characters in sauce
+    - After each comparison, the pointers a and b move towards the center of the string, and i is incremented by 2 to check the next pair of characters in sauce
+    - If the characters at a and b don't match sauce[i] and sauce[i+1], respectively, the function sets good to false and breaks the loop
+    - The inner while loops are used to skip over any non-letter characters in the string  
+  
+Basically this function validates a string by ensuring:
+- The characters in specific positions (from index 7 to 20) are digits or non-digits according to the isDigit array
+- The characters at symmetric positions around the middle of the string match the expected sequence defined in sauce
 
 
 
