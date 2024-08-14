@@ -389,6 +389,16 @@ From the result I just wrote the flag manually
 Flag: LITCTF{k3F7zH}
 ```
 
+#### Burger Reviewer
+![image](https://github.com/user-attachments/assets/715f7913-cd15-4fbc-97c6-4e84fecda2ef)
+
+We are given the Java source code as an attachement
+
+Downloading it and checking the content shows this
+![image](https://github.com/user-attachments/assets/9095b45e-296d-445c-8968-7fcc6df60561)
+![image](https://github.com/user-attachments/assets/24bdae4a-972c-4b64-b86b-c3a6f4be14cd)
+
+
 
 
 
