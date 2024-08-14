@@ -28,10 +28,10 @@
 
 - [netz-arbeiter](https://7h30ry.github.io/writeups/echoCTF/netz-arbeiter/)
 
+##  CTFs
+- [ECOWAS CTF 2023 - Prequalification](https://7h30ry.github.io/writeups/EcowasCTF/)
+- [Africa Cyber Defense Forum's Cyberlympics Semi](https://7h30ry.github.io/writeups/ACDF-Cyberlympics/)
+- [LITCTF 2024](https://7h30ry.github.io/writeups/)
 
-##  Ecowas CTF 2023 
-- [Prequalification](https://7h30ry.github.io/writeups/EcowasCTF/)
-
-
-## Africa Cyber Defense Forum's Cyberlympics 
-- [Semi](https://7h30ry.github.io/writeups/ACDF-Cyberlympics/)
+## Reverse Engineering
+- [MetaCTF July 2024](https://github.com/7h30ry/writeups/blob/main/Reverse-Engineering/FlagAppraisal.html)
