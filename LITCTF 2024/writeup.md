@@ -273,7 +273,7 @@ This attack exploits the fact that if a character in our provided password match
 
 We can leverage this time lapse to figure out the correct character at each position
 
-With that here's my solve script
+With that here's my solve [script](https://github.com/7h30ry/writeups/blob/main/LITCTF%202024/Solve%20Scripts/Kirbytime/solve.py)
 
 ```python
 import requests
