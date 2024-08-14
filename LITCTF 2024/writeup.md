@@ -423,7 +423,64 @@ This are the function it calls:
 
 We need to make sure that this function returns `true`
 
+Function cheese()
+![image](https://github.com/user-attachments/assets/f3a38202-d843-4af8-879f-d3bb1f6a28c2)
 
+```java
+public static boolean cheese(String s) {
+  return (s.charAt(13) == '_' && (int)s.charAt(17) == 95 && s.charAt(19) == '_' && s.charAt(26)+s.charAt(19) == 190 && s.charAt(29) == '_' && s.charAt(34)-5 == 90 && s.charAt(39) == '_');
+}
+```
+
+- This checks if the characters at those position equal the corresponding compared value
+
+Function meat()
+![image](https://github.com/user-attachments/assets/e63c4a53-1388-4202-b45c-1b6e5cd1128a)
+
+```java
+public static boolean meat(String s) {
+  boolean good = true;
+  int m = 41;
+  char[] meat = {'n', 'w', 'y', 'h', 't', 'f', 'i', 'a', 'i'};
+  int[] dif = {4, 2, 2, 2, 1, 2, 1, 3, 3};
+  for (int i = 0; i < meat.length; i++) {
+    m -= dif[i];
+    if (s.charAt(m) != meat[i]) {
+      good = false;
+      break;
+    }
+  }
+  return good;
+}
+```
+
+- This iterates through the length of array `meat` and subtracts it by `dif[i]` then compare the input passed into it at that subtracted index to the value at `meat[i]`
+
+Function pizzaSauce()
+![image](https://github.com/user-attachments/assets/0cb5580f-4688-43a6-8bc9-d11e64096794)
+
+```java
+public static boolean pizzaSauce(String s) {
+  boolean[] isDigit = {false, false, false, true, false, true, false, false, true, false, false, false, false, false};
+  for (int i = 7; i < 21; i++) {
+    if (Character.isDigit(s.charAt(i)) != isDigit[i - 7]) {
+      return false;
+    }
+  }
+  char[] sauce = {'b', 'p', 'u', 'b', 'r', 'n', 'r', 'c'};
+  int a = 7; int b = 20; int i = 0; boolean good = true;
+  while (a < b) {
+    if (s.charAt(a) != sauce[i] || s.charAt(b) != sauce[i+1]) {
+      good = false;
+      break;
+    }
+    a++; b--; i += 2;
+    while (!Character.isLetter(s.charAt(a))) a++;
+    while (!Character.isLetter(s.charAt(b))) b--;
+  }
+  return good;
+}
+```
 
 
 
