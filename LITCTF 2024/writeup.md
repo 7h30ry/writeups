@@ -498,5 +498,44 @@ Basically this function validates a string by ensuring:
 - The characters in specific positions (from index 7 to 20) are digits or non-digits according to the isDigit array
 - The characters at symmetric positions around the middle of the string match the expected sequence defined in sauce
 
+Function veggies()
+![image](https://github.com/user-attachments/assets/e1708d42-0168-45f9-b1a7-aef07d74a06e)
+
+```java
+public static boolean veggies(String s) {
+  int[] veg1 = {10, 12, 15, 22, 23, 25, 32, 36, 38, 40};
+  int[] veg = new int[10];
+  for (int i = 0; i < veg1.length; i++) {
+    veg[i] = Integer.parseInt(s.substring(veg1[i], veg1[i]+1));
+  }
+  return (veg[0] + veg[1] == 14 && veg[1] * veg[2] == 20 && veg[2]/veg[3]/veg[4] == 1 && veg[3] == veg[4] && veg[3] == 2 && veg[4] - veg[5] == -3 && Math.pow(veg[5], veg[6]) == 125 && veg[7] == 4 && veg[8] % veg[7] == 3 && veg[8] + veg[9] == 9 && veg[veg.length - 1] == 2);
+}
+```
+
+- Vegs1 array contains indices of the string s from which digits are extracted
+- The veg array stores the integers parsed from the characters in s at the positions specified by veg1
+- It then goes ahead and check for several mathematical conditions on the values in the veg array
+
+With this we need to generate the flag that satisfies the functions reviewed so far
+
+First we need it to be in the flag format and make sure it's length is 42
+
+```
+- LITCTF{..................................}
+```
+
+Based on function `cheese` , working on the string we get this:
+![image](https://github.com/user-attachments/assets/7cf1cc02-ada0-4867-97b7-6f5a00bf3d92)
+
+```
+- LITCTF{......_..._._......_.._...._...._.}
+```
+
+
+
+
+
+
+
 
 
