@@ -127,26 +127,46 @@ I downloaded it and checking it shows this
 ![image](https://github.com/user-attachments/assets/f3384796-7952-426e-ab82-b70825a6d8d4)
 
 First it imports some libraries
+
 ![image](https://github.com/user-attachments/assets/b2aa729a-27a4-459d-a134-90757f8963e5)
 
 This is basically used for signing a jwt payload
+
 ![image](https://github.com/user-attachments/assets/178a1758-30d2-4b1a-85c0-0cef81049fc8)
 
 Starts the web app to listen on port 3000 or the port specified in the environment variable
+
 ![image](https://github.com/user-attachments/assets/17e72ba8-1af4-480f-8012-b6da13ca61b2)
 
 Let's take a look at the routes now:
 
-- Login: it's going to make sure it's a valid user then sign the username and setting admin to `false`
+- Login: It's going to make sure it's a valid user then sign the username and setting admin to `false`
+- 
 ![image](https://github.com/user-attachments/assets/c9d73009-7a1f-408f-b95a-aa23a7540888)
 
-- Signup: it's going to basically just add the user to the accounts array and sign the username and setting admin to `false`
+- Signup: It's going to basically just add the user to the accounts array and sign the username and setting admin to `false`
+
 ![image](https://github.com/user-attachments/assets/21b734aa-87b5-4eee-8122-f58b9fdf5753)
 
-- Flag: 
+- Flag:  It's going to make sure the token is prevent then verifies the signature and make sure the username is set to admin meaning it's checking if `admin` is set to `true`
 
+![image](https://github.com/user-attachments/assets/17606190-8267-432d-a6e3-5b03610ab8a2)
 
+Because this verification does check the signature we can't go around this except via setting `admin` to `true`
 
+We can easily do that because we know the jwt secret 
+
+I wrote a script to generate a token for me
+![image](https://github.com/user-attachments/assets/00311e7d-0400-457f-86d0-86ee0acc517e)
+
+That's pretty much just copy paste from the original server code with some modification
+
+Running it i get a token and i used that to get the flag
+![image](https://github.com/user-attachments/assets/b0e38e36-d324-4501-8e3d-c29b3f24e85f)
+
+```
+Flag: LITCTF{v3rifyed_thI3_Tlme_1re4DV9}
+```
 
 
 
