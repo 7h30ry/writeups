@@ -126,9 +126,24 @@ I downloaded it and checking it shows this
 ![image](https://github.com/user-attachments/assets/352fb263-1395-4c0e-b497-d8b4b1c5b14f)
 ![image](https://github.com/user-attachments/assets/f3384796-7952-426e-ab82-b70825a6d8d4)
 
+First it imports some libraries
+![image](https://github.com/user-attachments/assets/b2aa729a-27a4-459d-a134-90757f8963e5)
 
+This is basically used for signing a jwt payload
+![image](https://github.com/user-attachments/assets/178a1758-30d2-4b1a-85c0-0cef81049fc8)
 
+Starts the web app to listen on port 3000 or the port specified in the environment variable
+![image](https://github.com/user-attachments/assets/17e72ba8-1af4-480f-8012-b6da13ca61b2)
 
+Let's take a look at the routes now:
+
+- Login: it's going to make sure it's a valid user then sign the username and setting admin to `false`
+![image](https://github.com/user-attachments/assets/c9d73009-7a1f-408f-b95a-aa23a7540888)
+
+- Signup: it's going to basically just add the user to the accounts array and sign the username and setting admin to `false`
+![image](https://github.com/user-attachments/assets/21b734aa-87b5-4eee-8122-f58b9fdf5753)
+
+- Flag: 
 
 
 
