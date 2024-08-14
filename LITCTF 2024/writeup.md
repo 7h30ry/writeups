@@ -75,11 +75,47 @@ I just removed it and it worked
 Flag: LITCTF{your_fOund_teh_fI@g_94932}
 ```
 
+#### Jwt-1
 
+![image](https://github.com/user-attachments/assets/b63b3313-9dff-48ae-b41e-19f40ea8644c)
 
+Accessing the provided url shows this
+![image](https://github.com/user-attachments/assets/57cd4dee-e5d0-4150-983e-7813080748e8)
 
+If we click `Get Flag` we should get this
+![image](https://github.com/user-attachments/assets/71fddc60-7988-4f34-bc8f-ff79f0d45e32)
 
+We can register here
+![image](https://github.com/user-attachments/assets/3cfd1abb-55ee-44ca-9cbf-d22b9fe91fe3)
 
+Doing that we should have a valid credential that can get us logged in
+
+Now that we are authentication I checked the cookie available and saw this jwt token
+![image](https://github.com/user-attachments/assets/60ad4601-6236-479f-81fd-f1736d11ac23)
+
+I decoded it using [jwt.io](https://jwt.io/)
+![image](https://github.com/user-attachments/assets/54deac36-a15e-485e-a363-b4876ffc0578)
+
+```json
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+
+{
+  "name": "pwner123",
+  "admin": false
+}
+```
+
+I just tried changed the `admin` key value to `true` to see if we could access the flag
+![image](https://github.com/user-attachments/assets/0bc05d64-8f23-49c5-bd5f-a2081e6f1750)
+
+Ok that works! And it's because it doesn't check for signature validation
+
+```
+Flag: LITCTF{o0ps_forg0r_To_v3rify_1re4DV9}
+```
 
 
 
