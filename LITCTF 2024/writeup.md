@@ -527,10 +527,22 @@ First we need it to be in the flag format and make sure it's length is 42
 Based on function `cheese` , working on the string we get this:
 ![image](https://github.com/user-attachments/assets/7cf1cc02-ada0-4867-97b7-6f5a00bf3d92)
 
+```python
+def cheese(s):
+    idx = {13: '_', 17: chr(95), 19: '_', 26: chr(190-ord('_')), 29: '_', 34: chr(90+5), 39: '_'}
+    s = s
+
+    for key, val in idx.items():
+        s[key] = val
+    
+    return s
+```
+
 ```
 - LITCTF{......_..._._......_.._...._...._.}
 ```
 
+Working on function `meat()`, i got this
 
 
 
