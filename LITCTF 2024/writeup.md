@@ -611,7 +611,11 @@ def veggies(s):
 - LITCTF{...9.5_.4._._.i.2a5_if_th3y_w4n7_2}
 ```
 
-Now we can 
+Now we can work on function `pizzaSauce()`
+![image](https://github.com/user-attachments/assets/b43e10e7-dac8-427f-95e8-9d492db13baf)
 
+```
+Flag: LITCTF{bur9r5_c4n_b_pi22a5_if_th3y_w4n7_2}
+```
 
 
