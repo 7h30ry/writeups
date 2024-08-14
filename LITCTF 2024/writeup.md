@@ -316,9 +316,78 @@ We can confirm it's right
 Flag: LITCTF{kBySlaY}
 ```
 
+## Reversing
 
+#### Forgotten Message
+![image](https://github.com/user-attachments/assets/2dc7ba18-94e2-4d3c-b18d-48eb2a20b440)
 
+I downloaded the binary and searched for low hanging fruits
+![image](https://github.com/user-attachments/assets/994dfe94-ff1e-4249-903e-fc98ebb7334c)
 
+```
+Flag: LITCTF{y0u_found_Me_3932cc3}
+```
+
+#### Kablewy
+![image](https://github.com/user-attachments/assets/868f5cf3-fd69-4fb8-ad6c-78bf19f248d4)
+
+When I accessed the url it made my browser hanged so i had to restart
+
+Trying it again I just used curl to get the html content
+![image](https://github.com/user-attachments/assets/1376b612-b1e9-4872-a58e-de8e2e838d57)
+
+We can see it's loading a javascript file at `/assets/index-DLdRi53f.js`
+
+So I curl'ed it
+![image](https://github.com/user-attachments/assets/42445e41-f1ee-4d52-b27f-6d6b6e75da83)
+
+It gives an ugly js code
+
+I beautified it using [js-beautifier](https://beautifier.io/)
+![image](https://github.com/user-attachments/assets/d091e761-2fd0-4c4a-b206-d6c97203e499)
+
+Looking through it I noticed some variables of type `const` storing a base64 encoded value
+![image](https://github.com/user-attachments/assets/a9070496-4263-473e-9a22-1990e4b3bc90)
+
+I decoded the first one and got this
+![image](https://github.com/user-attachments/assets/58d44641-ae9d-4934-8bc6-adc691c1be0f)
+
+Another base64 value which on decoding gives this
+![image](https://github.com/user-attachments/assets/c6164171-6371-4bd5-acb3-67c400c05141)
+
+```js
+while (true) console.log('kablewy');
+postMessage('L'); 
+```
+
+An infinite loop that makes sense as to why the browser crashes
+
+We can see it does `postMessage('L')`
+
+I decoded the second one
+![image](https://github.com/user-attachments/assets/fd94c117-eda9-4500-969b-a11ada62d565)
+
+You can notice that the parameter passed into `postMessage` is the flag character
+
+So we need to decode all values, I used some bash command to help automate this
+![image](https://github.com/user-attachments/assets/fa1b4d08-40cb-4e69-8c88-c9c6abb7f78c)
+
+```bash
+grep " \"[A-Za-z0-9]*\"," app.js | xargs -I {} echo {} | tr -d ',' | cut -d '=' -f 2 | cut -d ' ' -f 2 | base64 -d
+```
+
+And now we can fully decode it
+![image](https://github.com/user-attachments/assets/e9730e1e-6ee7-49b3-afb7-7b36181b0e2d)
+
+```
+grep " \"[A-Za-z0-9]*\"," app.js | xargs -I {} echo {} | tr -d ',' | cut -d '=' -f 2 | cut -d ' ' -f 2 | base64 -d | cut -d '"' -f 4 | base64 -d
+```
+
+From the result I just wrote the flag manually
+
+```
+Flag: LITCTF{k3F7zH}
+```
 
 
 
