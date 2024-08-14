@@ -614,6 +614,7 @@ def veggies(s):
 Now for the `pizzaSauce` function which should give us the final flag
 ![image](https://github.com/user-attachments/assets/74f90c34-9d94-449a-80f4-6c0df428c418)
 
+Here's the solve [script](https://github.com/7h30ry/writeups/blob/main/LITCTF%202024/Solve%20Scripts/Burger%20Reviewer/solve.py)
 ```python
 import string
 
@@ -678,6 +679,9 @@ veggie = veggies(meat_r)
 final_flag = pizzaSauce(veggie) 
 print(''.join(final_flag))
 ```
+
+We can validate it's the flag by compiling the java file and running it
+![image](https://github.com/user-attachments/assets/2554e043-12d2-445b-ac88-93b1561f08d8)
 
 And we have the flag 🙂
 
