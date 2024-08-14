@@ -13,12 +13,11 @@ This writeup contains the challenge to which I solved during the CTF
 - Traversed
 - KirbyTime
 
-### Reversing (5/6)
+### Reversing (4/6)
 - Forgotten Message
 - Kablewy
 - Burger Reviewer
 - Revsite1
-- Watchdog
 
 ### Pwn (5/8)
 - Function Pairing
@@ -116,6 +115,17 @@ Ok that works! And it's because it doesn't check for signature validation
 ```
 Flag: LITCTF{o0ps_forg0r_To_v3rify_1re4DV9}
 ```
+
+#### Jwt-2
+![image](https://github.com/user-attachments/assets/5ebdca89-9358-498d-9625-4e7cb50e2b00)
+
+Ok same web app as the previous one but this time we are provided with the source code
+
+I downloaded it and checking it shows this
+![image](https://github.com/user-attachments/assets/37f03dea-d5b9-4a45-96c3-ea702ba04c8b)
+![image](https://github.com/user-attachments/assets/352fb263-1395-4c0e-b497-d8b4b1c5b14f)
+![image](https://github.com/user-attachments/assets/f3384796-7952-426e-ab82-b70825a6d8d4)
+
 
 
 
