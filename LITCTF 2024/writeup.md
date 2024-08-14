@@ -543,7 +543,25 @@ def cheese(s):
 ```
 
 Working on function `meat()`, i got this
+![image](https://github.com/user-attachments/assets/fb87b3b9-8982-442d-80a2-b6af0440713b)
 
+```python
+def _meat(s):
+    m = 41
+    meat = ['n', 'w', 'y', 'h', 't', 'f', 'i', 'a', 'i']
+    dif = [4, 2, 2, 2, 1, 2, 1, 3, 3]
+    s = s
+    
+    for i in range(len(meat)):
+        m -= dif[i]
+        s[m] = meat[i]
+
+    return s
+```
+
+```
+- LITCTF{......_..._._.i..a._if_th.y_w.n._.}
+```
 
 
 
