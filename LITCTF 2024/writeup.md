@@ -779,13 +779,31 @@ Function Pairing
 
 ![image](https://github.com/user-attachments/assets/f8ba6ccb-cec0-450a-b127-04d89ae7c262)
 
+I don't have my solve script for this again
+
+But it was just a basic ret2libc
+ 
 Infinite Echo
 
 ![image](https://github.com/user-attachments/assets/fcb4bede-6eaa-4cf6-a5d2-3eb701f7bcb4)
 
+No solve script but this was a format string bug
+
+GOT overwrite of printf to system
+
 Recurse
 
 ![image](https://github.com/user-attachments/assets/957bb89e-2af8-4abe-ae80-649425e6dd01)
+
+This program would let us write into any file 
+
+If the file is written it would recompile `main.c` and execute it
+
+I wrote a function that calls `system('/bin/sh')` as a constructor into `main.c`
+
+```python
+
+```
 
 W4dup 2de
 
@@ -794,6 +812,7 @@ W4dup 2de
 Iloveseccomp
 
 ![image](https://github.com/user-attachments/assets/4b536045-de7c-4de9-a0e1-5cfedb38e98b)
+
 
 
 
