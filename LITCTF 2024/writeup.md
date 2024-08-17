@@ -801,6 +801,7 @@ If the file is written it would recompile `main.c` and execute it
 
 I wrote a function that calls `system('/bin/sh')` as a constructor into `main.c`
 
+Here's my [solve](https://github.com/7h30ry/writeups/blob/main/LITCTF%202024/Solve%20Scripts/Recurse/solve.py)
 ```python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
