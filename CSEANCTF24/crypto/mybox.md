@@ -22,5 +22,8 @@ The third function basically exits the process
 
 ![image](https://github.com/user-attachments/assets/bbf8ad00-a20c-4025-97e1-3e7426f48c42)
 
-The second function basically checks if the input received matched the value stored in `e_flag`
+The second function basically checks if the input received matches the value stored in `e_flag`
 ![image](https://github.com/user-attachments/assets/997bb0f6-c124-4be7-b466-38caeb4e340b)
+
+That means the main stuff is the "Generate" function
+![image](https://github.com/user-attachments/assets/4ac2c877-dae3-4823-91aa-1104385de0a1)
