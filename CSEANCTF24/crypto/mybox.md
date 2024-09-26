@@ -4,7 +4,7 @@
   - Solver: Nano (Pwn-Stars)
 
 
-![image](https://github.com/user-attachments/assets/4076c4fb-a205-4e12-a0fe-9e2caf974e7a)
+![image](https://github.com/user-attachments/assets/b1363983-5010-45ea-966c-ee1a6a6af935)
 
 We are given a zip file which contains the code running on the remote instance
 ![image](https://github.com/user-attachments/assets/db7bf13c-0059-41b3-8019-c5cbaf0bdbad)
@@ -59,6 +59,9 @@ def generate():
     print(f'Encrypted flag: {e_flag.hex()}')
 ```
 
-From looking at this we can tell two things:
+From looking at this we can tell this:
 - It generates a random key which is in the range of a byte
 - It seeds random with the current time and shuffles a list of value which contains integers from 0 to 256
+- For every character in the flag variable it does some substitution on it
+
+
