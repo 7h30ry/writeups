@@ -27,3 +27,34 @@ The second function basically checks if the input received matches the value sto
 
 That means the main stuff is the "Generate" function
 ![image](https://github.com/user-attachments/assets/4ac2c877-dae3-4823-91aa-1104385de0a1)
+
+```python
+#!/usr/bin/env python3
+import random
+import time
+
+flag = b"csean-ctf{[redacted]}24"
+e_flag = b""
+
+def generate():
+    global e_flag
+
+    key = random.randint(0, 0x100)
+    ct = int(time.time())
+    random.seed(ct)
+    sbox = list(range(256))
+    random.shuffle(sbox)
+
+    s = []
+
+    for val in flag:
+        r = key
+        while val:
+            r = sbox[r]
+            val -= 1
+        s.append(r)
+
+    e_flag = bytes(s)
+
+    print(f'Encrypted flag: {e_flag.hex()}')
+```
