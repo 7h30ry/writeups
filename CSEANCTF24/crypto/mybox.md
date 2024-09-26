@@ -21,3 +21,6 @@ We have three options to choose from:
 The third one basically exits the process
 
 ![image](https://github.com/user-attachments/assets/bbf8ad00-a20c-4025-97e1-3e7426f48c42)
+
+The second one basically checks if the input received matched the value stored in `e_flag`
+![image](https://github.com/user-attachments/assets/997bb0f6-c124-4be7-b466-38caeb4e340b)
