@@ -58,3 +58,7 @@ def generate():
 
     print(f'Encrypted flag: {e_flag.hex()}')
 ```
+
+From looking at this we can tell two things:
+- It generates a random key which is in the range of a byte
+- It seeds random with the current time and shuffles a list of value which contains integers from 0 to 256
