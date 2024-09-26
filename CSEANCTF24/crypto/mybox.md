@@ -65,10 +65,30 @@ S-box means substitution box
 
 The Sbox is a list of integers from 0 to 255 that is randomly shuffled based on a seed generated from the current time (ct) and the key is a random integer between 0 and 256
 
-To be honest i don't really understand what it does exactly but basically it will do multiple substitution based on the sbox value and the number of substitution it does is based on the key generated
+To be honest i don't really understand what it does exactly but basically it will do multiple substitution based on the shuffled sbox value and the number of substitution it does is based on the key generated
 
 The way i solved this is by generating a mapping of the ascii values and it's substituted value
 
-That works 
+That works because random is seeded with the current time and that means we can also predict what the shuffled list will be and since the key is just withtin a byte range we can brute force it
+
+Also if you notice the `confirm` choice actually gives us the current time so we can leverage that to brute force the seed (which is the time)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
