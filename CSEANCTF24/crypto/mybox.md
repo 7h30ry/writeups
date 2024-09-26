@@ -19,4 +19,5 @@ We have three options to choose from:
 - Quit
 
 The third one basically exits the process
+
 ![image](https://github.com/user-attachments/assets/bbf8ad00-a20c-4025-97e1-3e7426f48c42)
