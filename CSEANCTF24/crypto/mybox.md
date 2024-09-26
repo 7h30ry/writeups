@@ -59,9 +59,16 @@ def generate():
     print(f'Encrypted flag: {e_flag.hex()}')
 ```
 
-From looking at this we can tell this:
-- It generates a random key which is in the range of a byte
-- It seeds random with the current time and shuffles a list of value which contains integers from 0 to 256
-- For every character in the flag variable it does some substitution on it
+From looking at this we can tell that this function encrypts the flag using a randomly generated key and an S-box
+
+S-box means substitution box
+
+The Sbox is a list of integers from 0 to 255 that is randomly shuffled based on a seed generated from the current time (ct) and the key is a random integer between 0 and 256
+
+To be honest i don't really understand what it does exactly but basically it will do multiple substitution based on the sbox value and the number of substitution it does is based on the key generated
+
+The way i solved this is by generating a mapping of the ascii values and it's substituted value
+
+That works 
 
 
