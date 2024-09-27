@@ -102,7 +102,7 @@ The result is converted back to hex and returned.
 ```showFlag()``` Function:
 
 Displays the encrypted version of the flag.
-It XORs each byte of the flag with a value derived from the secret key and the byte's position ((ord(secret) + i) % 256), then prints the encrypted result in hexadecimal form.
+It XORs each byte of the flag with a value derived from the secret key and the byte's position ```((ord(secret) + i) % 256)```, then prints the encrypted result in hexadecimal form.
 
 ```showSecret()``` Function:
 
