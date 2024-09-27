@@ -96,7 +96,7 @@ The encrypt function is called, which XORs the two inputs ```(s1 and s2)```, bot
 ```encrypt(s1, s2)``` Function:
 
 Takes two hexadecimal strings (```s1 and s2```), converts them into byte arrays (```m1 and m2```).
-The function XORs each byte of m1 with a corresponding byte in m2. If m2 is shorter than m1, it wraps around using i % len(m2).
+The function XORs each byte of m1 with a corresponding byte in m2. If m2 is shorter than m1, it wraps around using ```i % len(m2)```.
 The result is converted back to hex and returned.
 
 ```showFlag()``` Function:
