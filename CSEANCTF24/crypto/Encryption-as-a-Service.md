@@ -80,6 +80,39 @@ if __name__ == '__main__':
     main()
 ```
 
+Global Variables:
+
+```flag```: A placeholder for the flag that will eventually be encrypted and revealed.
+```secret```: A secret key (byte) that will be used in the encryption process. Right now, it's just an empty byte string, but it will eventually be randomized.
+Functions:
+
+```to_bytes(h)```: Converts a hexadecimal string h into a byte sequence.
+```to_hex(h)```: Converts a byte sequence h into its hexadecimal representation.
+```getFlag()``` Function:
+
+This function encrypts the hexadecimal version of the flag ```(flag.hex())``` using the secret.
+The encrypt function is called, which XORs the two inputs ```(s1 and s2)```, both of which are hexadecimal strings converted to bytes.
+
+```encrypt(s1, s2)``` Function:
+
+Takes two hexadecimal strings (```s1 and s2```), converts them into byte arrays (```m1 and m2```).
+The function XORs each byte of m1 with a corresponding byte in m2. If m2 is shorter than m1, it wraps around using i % len(m2).
+The result is converted back to hex and returned.
+
+```showFlag()``` Function:
+
+Displays the encrypted version of the flag.
+It XORs each byte of the flag with a value derived from the secret key and the byte's position ((ord(secret) + i) % 256), then prints the encrypted result in hexadecimal form.
+
+```showSecret()``` Function:
+
+It just prints a joke message "lmao, not that easy!" instead of revealing the secret key. This is probably part of a challenge.
+
+```doService()``` Function:
+
+This is an encryption service where the user inputs a plaintext message ```(msg)``` and a key ```(key)```.
+Both msg and key are converted into hexadecimal strings and encrypted using the same ```encrypt()``` function described earlier.
+The result is printed as the encrypted message.
 
 
 so now we write the solve script
