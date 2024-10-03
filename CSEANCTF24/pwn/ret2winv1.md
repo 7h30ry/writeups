@@ -60,7 +60,7 @@ So we have to load the values ```0xdead``` and ```0xbeef``` into ```0x0000000000
 
 
 Have all that now we write our solve script. 
-```
+```python
 python
 from pwn import *
 # Allows you to switch between local/GDB/remote from terminal
