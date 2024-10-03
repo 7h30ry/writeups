@@ -33,7 +33,7 @@ def index():
     if request.method == 'GET':
         ''
 ``` 
-if the method being use is a GET result we really get that's why w now look a the ```else``` condition
+if the method being use is a GET request we get nothing. Now look a the ```else``` condition
 ```python
  else:
         os.system(c)
