@@ -104,7 +104,7 @@ feroxbuster -u http://underpass.htb/daloradius/app/
 
 Navigating to http://underpass.htb/daloradius/app/users/ on the browser we see a login page
 
-![[Screenshot from 2025-01-03 22-53-51.png]]
+![Screenshot from 2025-01-03 22-53-51](https://github.com/user-attachments/assets/ec7c504e-c87f-4e5b-82b4-6c09bcf752fb)
 
 then i was able to find the verison at  **/daloradius/doc/install/INSTALL**
 
@@ -128,14 +128,14 @@ the creds did not work for the login at **/daloradius/app/users/login.php**
 checking through more directories i found **/daloradius/app/operators** which is also a login page
 
 the credentials worked
-![[loggedin.png]]
+![loggedin](https://github.com/user-attachments/assets/a719bf5b-e264-470d-b8cb-f9053c9e645d)
 
 going through the page **Management >> list users** i saw an md5 password hash of another user
 
-![[md5.png]]
+![md5](https://github.com/user-attachments/assets/dca66001-0088-47e6-87fb-d2ff5911299b)
 
 so cracking the md5 hash
-![[pass.png]]
+![pass](https://github.com/user-attachments/assets/895812a3-ba6b-49a1-a880-507a886bd7c5)
 
 we have the password ```underwaterfriends``` for user ```svcMosh```
 
