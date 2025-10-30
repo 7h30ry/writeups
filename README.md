@@ -2,11 +2,11 @@
 
 👀 I’m interested in Cyber Security and Programming
 
-🌱 I’m currently improving my knowledge in Ethical Hacking and Programming
+🌱 CTF Player | CyberSecurity Analyst | Penetration Tester
 
 💞️ I’m looking to collaborate on Projects
 
-📫 How to reach me? on Discord @7h30ry Twitter(X) @Paul__ige LinkedIn https://www.linkedin.com/in/paul-ige-443324235/
+📫 How to reach me? on Discord @7h30ry Twitter(X) @Paul__ige [LinkedIn](https://www.linkedin.com/in/paul-ige-44a395213/)
 
 
 
